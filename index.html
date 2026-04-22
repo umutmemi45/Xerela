@@ -2,165 +2,150 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Xerela Sunucusu</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        body, html {
+        /* Tüm sayfa ayarları */
+        html, body {
             margin: 0;
             padding: 0;
-            width: 100%;
             height: 100%;
-            overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden; /* Taşmaları engelle */
+            background-color: #000; /* Arka plan siyah */
+            font-family: 'VT323', monospace; /* Minecraft tipi font */
+            -webkit-tap-highlight-color: transparent; /* Mobil tıklama vurgusunu kaldır */
         }
 
-        /* Arka Plan: Dağ ve sabah manzarası */
-        .background {
+        /* Arka plan manzarası (Image 1'dekiSteve'li güneşli manzara) */
+        .background-scene {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://wallpaperaccess.com/full/153641.jpg') no-repeat center center;
+            background-image: url('image_1.png'); /* Görsel adının doğru olduğundan emin ol */
             background-size: cover;
-            z-index: -2;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1; /* En arkada */
+            /* Hafif bir bulanıklık ekleyerek ön planı öne çıkarabiliriz (isteğe bağlı) */
+            /* filter: blur(2px); */
         }
 
-        /* Alt taraftaki toprak ve çimen katmanı */
-        .ground {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 25%;
-            background: #5d3a1a;
-            border-top: 15px solid #2e5d1f;
-            z-index: -1;
-            box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
-        }
-
-        /* Havada uçuşan pikseller */
-        .particle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.5);
-            animation: float 10s infinite linear;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Koşan Karakter (Steve/Karakter) */
-        .runner {
-            position: absolute;
-            bottom: 20%;
-            width: 80px;
-            z-index: 5;
-            animation: run 8s infinite linear;
-        }
-
-        @keyframes run {
-            0% { left: -100px; }
-            100% { left: 110%; }
-        }
-
-        /* İçerik Konumlandırma */
-        .content {
+        /* Telefon Çerçevesi (Konteyner) */
+        .phone-container {
+            position: relative;
+            z-index: 10; /* Arka planın önünde */
+            width: 90%; /* Mobilde genişlik */
+            max-width: 360px; /* Masaüstünde maksimum genişlik (telefon boyutu) */
+            height: 80vh; /* Ekranın %80'i kadar yükseklik */
+            margin: 10vh auto; /* Ortala ve üstten-alttan boşluk bırak */
+            background-color: #fff; /* Telefonun iç ekranı beyaz */
+            border-radius: 36px; /* Telefonun yuvarlak köşeleri */
+            border: 12px solid #222; /* Siyah telefon çerçevesi */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Derinlik hissi */
+            overflow: hidden; /* İçerik çerçeveden taşmasın */
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: space-between; /* İçeriği yukarı ve aşağı yay */
+            padding: 20px;
+        }
+
+        /* Telefonun üst kısmındaki detaylar (Ahize, kamera) */
+        .phone-header {
+            width: 100%;
+            height: 20px;
+            display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-
-        h1 {
-            color: white;
-            font-size: 3rem;
-            text-shadow: 4px 4px 0px #373737;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        /* Buton Tasarımı */
-        .join-box {
-            display: flex;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px 35px;
-            border: 4px solid #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s;
-            z-index: 10;
-        }
-
-        .join-box:hover {
-            background-color: rgba(46, 93, 31, 0.9);
-            transform: scale(1.05);
-        }
-
-        .dirt-icon {
-            width: 40px;
-            height: 40px;
-            margin-right: 15px;
-        }
-
-        .btn-text {
-            color: #fff;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        /* Güneş */
-        .sun {
             position: absolute;
-            top: 50px;
-            right: 60px;
-            width: 80px;
-            height: 80px;
-            background: #ffea00;
-            border-radius: 50%;
-            box-shadow: 0 0 50px #ffea00;
+            top: 0;
         }
+        .phone-notch {
+            width: 60px;
+            height: 10px;
+            background-color: #222;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        /* Başlık Alanı (XERELA SUNUCUSU) */
+        .server-title {
+            color: #333;
+            font-size: 3rem; /* Mobilde büyük olsun */
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 60px; /* Notch'tan aşağıda başla */
+            line-height: 1.1;
+        }
+
+        /* Buton ve Toprak Alanı Konteyneri */
+        .bottom-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Buton ve toprak arası boşluk */
+            margin-bottom: 20px; /* Çerçevenin altından boşluk */
+        }
+
+        /* Tıklanabilir Buton */
+        .join-button {
+            background-color: #4a4a4a; /* Koyu gri */
+            color: white;
+            border: 4px solid #fff; /* Beyaz çerçeve */
+            border-radius: 4px;
+            padding: 15px 30px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 80%; /* Buton genişliği */
+            text-align: center;
+            position: relative;
+            transition: all 0.1s ease; /* Tıklama efekti için geçiş */
+            outline: none; /* Odaklanma çizgisini kaldır */
+        }
+
+        /* TIKLAMA EFEKTİ - Basılı tutunca */
+        .join-button:active {
+            transform: scale(0.95); /* Hafifçe küçült */
+            background-color: #333; /* Daha koyu gri yap */
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); /* İç gölge ekle (basılma hissi) */
+        }
+
+        /* Toprak Blok Alanı */
+        .dirt-block {
+            width: 100%;
+            height: 100px;
+            background-color: #8b4513; /* Kahverengi toprak */
+            border-top: 10px solid #228b22; /* Yeşil çim çizgisi */
+            border-radius: 4px;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="background"></div>
-    <div class="ground"></div>
-    <div class="sun"></div>
+    <div class="background-scene"></div>
 
-    <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
-    <div class="particle" style="left: 45%; animation-delay: 4s;"></div>
-    <div class="particle" style="left: 75%; animation-delay: 2s;"></div>
+    <div class="phone-container">
+        <div class="phone-header">
+            <div class="phone-notch"></div>
+        </div>
 
-    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJndm8xdmR5bmR5bmR5bmR5bmR5bmR5bmR5bmR5bmR5bmR5bmR5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/v6aOadnPQalCz_LMTJ/giphy.gif" class="runner">
+        <h1 class="server-title">XERELA<br>SUNUCUSU</h1>
 
-    <div class="content">
-        <h1>XERELA SUNUCUSU</h1>
-        <div class="join-box" onclick="playEffect()">
-            <img src="https://blockbench.net/logo_dirt.png" class="dirt-icon" alt="Toprak">
-            <span class="btn-text">SUNUCUYA KATIL</span>
+        <div class="bottom-section">
+            <button class="join-button" onclick="alert('Sunucuya katılma özelliği yakında eklenecek!')">
+                SUNUCUYA KATIL
+            </button>
+            
+            <div class="dirt-block"></div>
         </div>
     </div>
-
-    <audio id="sound">
-        <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-        function playEffect() {
-            var snd = document.getElementById("sound");
-            snd.play();
-            setTimeout(function() {
-                alert("Sivas sunucusuna bağlanılıyor...");
-            }, 200);
-        }
-    </script>
 
 </body>
 </html>
