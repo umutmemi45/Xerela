@@ -9,8 +9,8 @@
     body {
       margin: 0;
       padding: 0;
-      /* Arka plan resminin adını buraya TAM OLARAK yaz (Örn: ekran.png) */
-      background: #111 url('ekran_resmi.png') no-repeat center center fixed;
+      /* ARKA PLAN BURADA: Resmin adını tam olarak yaz (Örn: ekran.png) */
+      background: #111 url('RESİM-ADI-BURAYA.jpg') no-repeat center center fixed;
       background-size: cover;
       font-family: 'Press Start 2P', cursive;
       display: flex;
@@ -21,7 +21,7 @@
       overflow: hidden;
     }
 
-    /* Daha gerçekçi bir karartma katmanı */
+    /* Görselin üzerine hafif bir karartma atıyoruz ki yazılar okunsun */
     body::before {
       content: "";
       position: absolute;
@@ -62,7 +62,6 @@
       z-index: 1;
     }
 
-    /* Minecraft Buton Tasarımı */
     .mc-button-wrapper {
       position: relative;
       width: 85%;
@@ -71,22 +70,21 @@
       align-items: center;
     }
 
-    /* Toprak Blok İkonu */
     .dirt-block {
       position: absolute;
       left: 10px;
       width: 35px;
       height: 35px;
-      background-image: url('https://minecraft.wiki/images/Thumb_Dirt_Path_JE2_BE2.png'); /* Yedek ikon, istersen değiştirebilirsin */
+      background-image: url('https://minecraft.wiki/images/Thumb_Dirt_Path_JE2_BE2.png'); 
       background-size: contain;
       background-repeat: no-repeat;
       z-index: 2;
-      image-rendering: pixelated; /* Minecraft piksel tarzını korur */
+      image-rendering: pixelated; 
     }
 
     .mc-button {
       width: 100%;
-      padding: 22px 20px 22px 55px; /* Sol tarafa ikon için boşluk bıraktık */
+      padding: 22px 20px 22px 55px;
       background: #6aaa49;
       border: 4px solid #1e4514;
       color: #fff;
@@ -133,8 +131,6 @@
   <script>
     const btn = document.getElementById('joinBtn');
     const statusText = document.getElementById('status');
-
-    // Aternos veya kendi sunucu IP'ni buraya yaz
     const SUNUCU_IP = "senin_sunucu_adresin.aternos.me"; 
 
     function playClick() {
@@ -156,11 +152,8 @@
       playClick();
       statusText.textContent = "Bağlanılıyor...";
       statusText.style.color = "#fbbf24";
-
       setTimeout(() => {
-        // Minecraft'ı açma komutun hala burada, bozulmadı
         window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=19132`;
-        
         statusText.textContent = "Minecraft Açılıyor!";
         statusText.style.color = "#4ade80";
       }, 1000);
