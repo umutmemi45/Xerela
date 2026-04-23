@@ -5,75 +5,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xerela Sunucusu</title>
   <style>
+    /* Google Fonts'tan Minecraft'a benzeyen bir font çektim */
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
     body {
       background-color: #1a1a1a; 
-      background-image: url('IMG_20260423_172129.png'); 
+      /* Arka plan resmin duruyor */
+      background-image: url(''); 
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
       margin: 0;
+      /* O siyah çerçeveyi kaldırmak için container'ı sildim, her şeyi body'e ortaladım */
       display: flex;
+      flex-direction: column; /* Üst üste gelmeleri için */
       align-items: center;
-      justify-content: center;
+      justify-content: space-between; /* İsim tepede, buton dipte olsun diye */
       height: 100vh;
-      font-family: sans-serif;
-    }
-
-    .container {
-      background: rgba(0, 0, 0, 0.6); /* Biraz daha şeffaf yaptım resim görünsün diye */
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      width: 80%;
-      max-width: 350px;
+      padding: 5vh 0; /* Tepeden ve dipten biraz boşluk */
     }
 
     h1 {
       margin: 0;
-      font-size: 24px;
-      letter-spacing: 1px;
+      /* İşte o Minecraft taş efekti */
+      font-family: 'Press Start 2P', cursive;
+      font-size: 32px; /* Daha büyük ve net */
+      color: #b0b0b0; /* Taş grisi */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      /* 3D ve gölge efekti */
+      text-shadow: 
+        2px 2px 0 #000,
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000,
+        0px 2px 0 #000,
+        0px -2px 0 #000,
+        2px 0px 0 #000,
+        -2px 0px 0 #000,
+        4px 4px 0 #555; /* Taş detayı */
+    }
+
+    .btn-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding-bottom: 5vh; /* Alttan boşluk */
     }
 
     .btn {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 15px 30px;
+      /* Butonu kocaman yaptık */
+      width: 90%; 
+      max-width: 600px;
+      padding: 25px; /* Daha kalın ve büyük */
       background-color: #47a025;
       color: white;
       text-decoration: none;
-      border-radius: 10px;
+      border-radius: 15px; /* Hafif yuvarlak */
       font-weight: bold;
       transition: 0.3s;
       cursor: pointer;
-      border: none;
-      font-size: 16px;
-      width: 100%;
+      border: 4px solid #2a6116; /* Koyu yeşil çerçeve */
+      font-size: 24px; /* Yazı da büyüdü */
+      font-family: sans-serif;
+      text-align: center;
+      box-shadow: 0 8px 0 #2a6116; /* Minecraft buton gölgesi */
     }
 
     .btn:hover {
       background-color: #5ad12f;
-      transform: scale(1.05);
+      transform: translateY(2px); /* Basılma efekti */
+      box-shadow: 0 6px 0 #2a6116;
+    }
+
+    .btn:active {
+        transform: translateY(6px); /* Tam basılma efekti */
+        box-shadow: 0 2px 0 #2a6116;
     }
 
     #statusText {
-      display: block;
-      margin-top: 15px;
-      font-size: 14px;
-      min-height: 20px;
+      position: absolute;
+      bottom: 2vh;
+      color: white;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>XERELA SUNUCUSU</h1>
-    
+  <h1>XERELA</h1>
+  
+  <div class="btn-container">
     <button id="joinBtn" class="btn">SUNUCUYA KATIL</button>
-    <span id="statusText"></span>
   </div>
+  
+  <span id="statusText"></span>
 
   <script>
     const SUNUCU_IP = "xerela47.aternos.me";
@@ -96,7 +123,7 @@
       statusText.style.color = "#fbbf24";
       
       setTimeout(() => {
-        // İşte o özel link, sistemi hiç bozmadan burada çalışıyor
+        // Özel link
         window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=19132`;
         
         statusText.textContent = "Minecraft Açılıyor!";
