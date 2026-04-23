@@ -3,557 +3,161 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Xerela Sunucusu — Pro</title>
-
-  <!-- Minecraft-pixel font benzeri (Press Start 2P) -->
+  <title>Xerela Sunucusu — Pro Mod</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
   <style>
-    /* ---------- Reset ---------- */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
     body {
-      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
-      background: #0b1220;
-      color: #fff;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow: hidden;
+      margin:0;
+      background:#0b1220;
+      font-family:'Press Start 2P', monospace;
+      color:#fff;
+      overflow:hidden;
     }
-
-    /* ---------- Layout ---------- */
     .wrap {
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      position: relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
     }
-
-    /* Card / phone mockup container */
     .phone {
-      width: min(420px, 92%);
-      max-width: 420px;
-      border-radius: 28px;
-      padding: 14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
-      box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
-      position: relative;
-      overflow: hidden;
-      -webkit-tap-highlight-color: transparent;
+      width:420px;
+      border-radius:28px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.06));
+      box-shadow:0 30px 80px rgba(0,0,0,0.6);
+      position:relative;
+      overflow:hidden;
     }
-
-    /* Canvas fills the phone screen */
-    #scene {
-      width: 100%;
-      height: 560px;
-      display: block;
-      border-radius: 16px;
-      background: linear-gradient(180deg,#7ec0ee 0%, #f6d6a8 70%);
-      box-shadow: inset 0 6px 18px rgba(0,0,0,0.25);
+    canvas {
+      width:100%;
+      height:560px;
+      display:block;
+      border-radius:16px;
     }
-
-    /* UI overlay */
     .ui {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 40px);
-      top: 18px;
-      z-index: 6;
-      text-align: center;
-      pointer-events: none;
+      position:absolute;
+      top:20px;
+      width:100%;
+      text-align:center;
+      z-index:10;
     }
     .title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 18px;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      text-shadow: 0 8px 20px rgba(0,0,0,0.6);
-      pointer-events: none;
+      font-size:18px;
+      text-shadow:0 8px 20px rgba(0,0,0,0.6);
     }
     .subtitle {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #e6f7ff;
-      opacity: 0.95;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.45);
-      pointer-events: none;
+      font-size:12px;
+      margin-top:8px;
+      color:#e6f7ff;
     }
-
-    /* Bottom controls */
     .controls {
-      position: absolute;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 40px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      z-index: 7;
-      pointer-events: auto;
+      position:absolute;
+      bottom:20px;
+      width:100%;
+      text-align:center;
+      z-index:10;
     }
-
     .join-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 18px;
-      background: linear-gradient(180deg,#ff9a3c 0%, #ff7a1a 100%);
-      color: #fff;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      border-radius: 10px;
-      border: 3px solid rgba(0,0,0,0.25);
-      box-shadow: 0 10px 0 rgba(0,0,0,0.35), 0 18px 40px rgba(0,0,0,0.45);
-      cursor: pointer;
-      user-select: none;
-      transition: transform 160ms cubic-bezier(.2,.9,.3,1), box-shadow 160ms;
+      padding:12px 18px;
+      background:linear-gradient(180deg,#ff9a3c 0%, #ff7a1a 100%);
+      border:3px solid rgba(0,0,0,0.25);
+      border-radius:10px;
+      box-shadow:0 10px 0 rgba(0,0,0,0.35);
+      color:#fff;
+      cursor:pointer;
     }
-    .join-btn:active { transform: translateY(6px); box-shadow: 0 4px 0 rgba(0,0,0,0.35); }
-
     .status {
-      padding: 6px 10px;
-      background: rgba(0,0,0,0.28);
-      border-radius: 999px;
-      font-size: 11px;
-      color: #dff7ff;
-      border: 1px solid rgba(255,255,255,0.03);
-      text-shadow: 0 1px 0 rgba(0,0,0,0.4);
-    }
-
-    /* Particle canvas overlay (for shatter) */
-    #particles {
-      position: absolute;
-      inset: 0;
-      z-index: 8;
-      pointer-events: none;
-    }
-
-    /* Footer small text */
-    .footer {
-      position: absolute;
-      bottom: 6px;
-      left: 12px;
-      font-size: 10px;
-      color: rgba(255,255,255,0.7);
-      z-index: 9;
-    }
-
-    /* Responsive */
-    @media (max-width: 520px) {
-      #scene { height: 520px; }
-      .title { font-size: 14px; }
-      .join-btn { padding: 10px 14px; font-size: 10px; }
+      margin-top:10px;
+      font-size:11px;
+      background:rgba(0,0,0,0.28);
+      border-radius:999px;
+      display:inline-block;
+      padding:6px 10px;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="phone" role="region" aria-label="Sunucu kartı">
-      <canvas id="scene" width="420" height="560" aria-hidden="false"></canvas>
-      <canvas id="particles" width="420" height="560" aria-hidden="true"></canvas>
-
-      <div class="ui" aria-hidden="false">
-        <div class="title" id="pageTitle">XERELA SUNUCUSU</div>
-        <div class="subtitle" id="pageSubtitle">Sivas sunucusuna bağlanılıyor...</div>
+    <div class="phone">
+      <canvas id="scene"></canvas>
+      <div class="ui">
+        <div class="title">XERELA SUNUCUSU</div>
+        <div class="subtitle">Sivas sunucusuna bağlanılıyor...</div>
       </div>
-
-      <div class="controls" role="group" aria-label="Kontroller">
-        <button id="joinBtn" class="join-btn" aria-label="Sunucuya katıl">SUNUCUYA KATIL</button>
-        <div id="status" class="status" role="status" aria-live="polite">Bağlantı: Bekleniyor</div>
+      <div class="controls">
+        <button id="joinBtn" class="join-btn">SUNUCUYA KATIL</button>
+        <div id="status" class="status">Bağlantı: Bekleniyor</div>
       </div>
-
-      <div class="footer">Xerela • Sivas Sunucusu • 2026</div>
     </div>
   </div>
-
   <script>
-  /* ============================
-     Pro-level single-file implementation
-     - Single main canvas for scene
-     - Particle canvas for shatter
-     - Procedural block terrain
-     - SVG-like pixel character drawn on canvas
-     - WebAudio procedural click
-     - requestAnimationFrame optimized loop
-     - Non-blocking connection simulation
-     ============================ */
-
-  (function () {
-    'use strict';
-
-    // ---------- Config ----------
-    const cfg = {
-      width: 420,
-      height: 560,
-      pixelRatioCap: 2,
-      terrainRows: 4,
-      blockSize: 40,
-      skyColorTop: '#7ec0ee',
-      skyColorBottom: '#f6d6a8',
-      sunColor: '#ffd36b',
-      fpsLimit: 60,
-      parallaxStrength: 0.02
-    };
-
-    // ---------- Canvas setup ----------
-    const canvas = document.getElementById('scene');
-    const ctx = canvas.getContext('2d', { alpha: false });
-    const pCanvas = document.getElementById('particles');
-    const pCtx = pCanvas.getContext('2d', { alpha: true });
-
-    function resizeCanvases() {
-      const dpr = Math.min(window.devicePixelRatio || 1, cfg.pixelRatioCap);
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-      canvas.style.width = rect.width + 'px';
-      canvas.style.height = rect.height + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      pCanvas.width = canvas.width;
-      pCanvas.height = canvas.height;
-      pCanvas.style.width = canvas.style.width;
-      pCanvas.style.height = canvas.style.height;
-      pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    window.addEventListener('resize', resizeCanvases);
-    resizeCanvases();
-
-    // ---------- Utility ----------
-    function rand(min, max) { return Math.random() * (max - min) + min; }
-    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-
-    // ---------- Scene state ----------
-    const state = {
-      t: 0,
-      lastFrame: performance.now(),
-      mouse: { x: cfg.width/2, y: cfg.height/2 },
-      parallax: { x: 0, y: 0 },
-      shards: []
-    };
-
-    // ---------- Parallax ----------
-    window.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const mx = (e.clientX - rect.left) / rect.width;
-      const my = (e.clientY - rect.top) / rect.height;
-      state.parallax.x = (mx - 0.5) * cfg.parallaxStrength * rect.width;
-      state.parallax.y = (my - 0.5) * cfg.parallaxStrength * rect.height;
-    });
-
-    // ---------- Procedural terrain generation ----------
-    function generateTerrain(cols) {
-      const blocks = [];
-      for (let i = 0; i < cols; i++) {
-        const height = Math.floor(rand(1, cfg.terrainRows + 1));
-        blocks.push({ h: height, variation: Math.random() });
-      }
-      return blocks;
-    }
-    const cols = Math.ceil(cfg.width / cfg.blockSize) + 6;
-    const terrain = generateTerrain(cols);
-
-    // ---------- Draw functions ----------
-    function drawSky() {
-      const g = ctx.createLinearGradient(0, 0, 0, cfg.height);
-      g.addColorStop(0, cfg.skyColorTop);
-      g.addColorStop(1, cfg.skyColorBottom);
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, cfg.width, cfg.height);
-    }
-
-    function drawSun(t) {
-      const sunX = cfg.width * 0.78 + Math.sin(t * 0.0006) * 18;
-      const sunY = cfg.height * 0.18 + Math.cos(t * 0.0009) * 8;
-      const r = 48;
-      const g = ctx.createRadialGradient(sunX, sunY, r*0.1, sunX, sunY, r*1.8);
-      g.addColorStop(0, '#fff3b0');
-      g.addColorStop(0.3, '#ffd36b');
-      g.addColorStop(1, 'rgba(255,184,77,0)');
-      ctx.fillStyle = g;
+    const canvas=document.getElementById('scene');
+    const ctx=canvas.getContext('2d');
+    canvas.width=420;canvas.height=560;
+    let t=0;
+    function draw(){
+      ctx.clearRect(0,0,420,560);
+      // Sky gradient
+      let g=ctx.createLinearGradient(0,0,0,560);
+      g.addColorStop(0,'#7ec0ee');
+      g.addColorStop(1,'#f6d6a8');
+      ctx.fillStyle=g;
+      ctx.fillRect(0,0,420,560);
+      // Sun
       ctx.beginPath();
-      ctx.arc(sunX, sunY, r*1.6, 0, Math.PI*2);
+      ctx.arc(320,100,50+Math.sin(t/50)*5,0,Math.PI*2);
+      ctx.fillStyle='#ffd36b';
       ctx.fill();
-    }
-
-    function drawTerrain(t) {
-      const baseY = cfg.height - 120;
-      const blockW = cfg.blockSize;
-      for (let i = -3; i < cols; i++) {
-        const b = terrain[i + 3] || { h: 1, variation: 0 };
-        const x = i * blockW + (state.parallax.x * 0.2);
-        const h = b.h;
-        // draw stacked blocks
-        for (let r = 0; r < h; r++) {
-          const y = baseY - r * blockW;
-          // color variation
-          const g1 = ctx.createLinearGradient(x, y, x+blockW, y+blockW);
-          g1.addColorStop(0, '#7bbf4a');
-          g1.addColorStop(1, '#5fa033');
-          ctx.fillStyle = g1;
-          ctx.fillRect(x, y, blockW, blockW);
-          // top highlight
-          ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-          ctx.lineWidth = 1;
-          ctx.strokeRect(x, y, blockW, blockW);
-        }
-        // dirt layer
-        ctx.fillStyle = '#8b5a2b';
-        ctx.fillRect(x, baseY + blockW - 12, blockW, 12);
-        ctx.strokeStyle = 'rgba(255,255,255,0.02)';
-        ctx.strokeRect(x, baseY + blockW - 12, blockW, 12);
-      }
-    }
-
-    // ---------- Pixel-style character drawing on canvas ----------
-    function drawCharacter(cx, cy, scale = 1) {
-      // simple blocky character (non-trademarked)
-      const s = 1 * scale;
-      // shadow
-      ctx.fillStyle = 'rgba(0,0,0,0.45)';
-      ctx.beginPath();
-      ctx.ellipse(cx, cy + 80*s, 60*s, 18*s, 0, 0, Math.PI*2);
-      ctx.fill();
-
-      // body
-      ctx.fillStyle = '#3b82c4';
-      ctx.fillRect(cx - 40*s, cy - 10*s, 80*s, 80*s);
-      ctx.strokeStyle = '#1f4f7a';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(cx - 40*s, cy - 10*s, 80*s, 80*s);
-
-      // head
-      ctx.fillStyle = '#f2c08a';
-      ctx.fillRect(cx - 30*s, cy - 70*s, 60*s, 60*s);
-      ctx.strokeStyle = '#b07a4a';
-      ctx.strokeRect(cx - 30*s, cy - 70*s, 60*s, 60*s);
-
-      // eyes
-      ctx.fillStyle = '#0b2a3a';
-      ctx.fillRect(cx - 15*s, cy - 50*s, 10*s, 10*s);
-      ctx.fillRect(cx + 5*s, cy - 50*s, 10*s, 10*s);
-
-      // pickaxe (floating)
+      // Terrain
+      ctx.fillStyle='#5fa033';
+      ctx.fillRect(0,440,420,120);
+      ctx.fillStyle='#8b5a2b';
+      ctx.fillRect(0,520,420,40);
+      // Character
+      ctx.fillStyle='#3b82c4';
+      ctx.fillRect(170,300,80,80);
+      ctx.fillStyle='#f2c08a';
+      ctx.fillRect(180,240,60,60);
+      ctx.fillStyle='#0b2a3a';
+      ctx.fillRect(195,260,10,10);
+      ctx.fillRect(215,260,10,10);
+      // Pickaxe
       ctx.save();
-      ctx.translate(cx + 60*s, cy - 40*s);
-      ctx.rotate(Math.sin(state.t * 0.002) * 0.18);
-      ctx.fillStyle = '#6b4b2a';
-      ctx.fillRect(-2*s, 0, 6*s, 60*s);
-      ctx.fillStyle = '#9ad3ff';
-      ctx.fillRect(-12*s, -10*s, 24*s, 20*s);
-      ctx.fillStyle = '#4aa6ff';
-      ctx.globalAlpha = 0.95;
-      ctx.fillRect(-12*s, -6*s, 24*s, 6*s);
+      ctx.translate(250,250);
+      ctx.rotate(Math.sin(t/30)*0.2);
+      ctx.fillStyle='#6b4b2a';
+      ctx.fillRect(-2,0,6,60);
+      ctx.fillStyle='#9ad3ff';
+      ctx.fillRect(-12,-10,24,20);
       ctx.restore();
+      t++;
+      requestAnimationFrame(draw);
+    }
+    draw();
 
-      // floating blocks
-      ctx.fillStyle = '#7bbf4a';
-      ctx.fillRect(cx - 120*s, cy - 120*s, 28*s, 28*s);
-      ctx.fillRect(cx + 80*s, cy + 20*s, 28*s, 28*s);
-      ctx.fillRect(cx - 120*s, cy + 40*s, 28*s, 28*s);
-      ctx.strokeStyle = '#5fa033';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(cx - 120*s, cy - 120*s, 28*s, 28*s);
-      ctx.strokeRect(cx + 80*s, cy + 20*s, 28*s, 28*s);
-      ctx.strokeRect(cx - 120*s, cy + 40*s, 28*s, 28*s);
-      ctx.globalAlpha = 1;
+    // Audio click
+    let audioCtx=null;
+    function playClick(){
+      if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      const o=audioCtx.createOscillator();
+      const g=audioCtx.createGain();
+      o.type='square';o.frequency.value=880;
+      o.connect(g);g.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.001,audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.1,audioCtx.currentTime+0.01);
+      g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.2);
+      o.start();o.stop(audioCtx.currentTime+0.25);
     }
 
-    // ---------- Particles (shatter) ----------
-    function spawnShards(x, y, count = 18) {
-      for (let i = 0; i < count; i++) {
-        const angle = rand(0, Math.PI*2);
-        const speed = rand(2, 8);
-        const life = rand(600, 1200);
-        state.shards.push({
-          x, y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed - rand(1,4),
-          size: rand(6, 18),
-          rot: rand(0, Math.PI*2),
-          drot: rand(-0.2, 0.2),
-          t0: performance.now(),
-          life,
-          colorA: `hsl(${Math.floor(rand(20,40))}deg 100% 60%)`,
-          colorB: `hsl(${Math.floor(rand(10,20))}deg 100% 45%)`
-        });
-      }
-    }
-
-    function updateShards(dt) {
-      const now = performance.now();
-      for (let i = state.shards.length - 1; i >= 0; i--) {
-        const s = state.shards[i];
-        const age = now - s.t0;
-        if (age > s.life) { state.shards.splice(i, 1); continue; }
-        s.vy += 0.18 * (dt/16); // gravity scaled
-        s.x += s.vx * (dt/16);
-        s.y += s.vy * (dt/16);
-        s.rot += s.drot * (dt/16);
-      }
-    }
-
-    function drawShards() {
-      pCtx.clearRect(0,0,canvas.width,canvas.height);
-      pCtx.save();
-      pCtx.globalCompositeOperation = 'lighter';
-      for (const s of state.shards) {
-        pCtx.save();
-        pCtx.translate(s.x, s.y);
-        pCtx.rotate(s.rot);
-        const g = pCtx.createLinearGradient(-s.size/2, -s.size/2, s.size/2, s.size/2);
-        g.addColorStop(0, s.colorA);
-        g.addColorStop(1, s.colorB);
-        pCtx.fillStyle = g;
-        pCtx.fillRect(-s.size/2, -s.size/2, s.size, s.size);
-        pCtx.restore();
-      }
-      pCtx.restore();
-    }
-
-    // ---------- WebAudio procedural click ----------
-    let audioCtx = null;
-    function ensureAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      return audioCtx;
-    }
-    function playClick() {
-      try {
-        const ctxA = ensureAudio();
-        const o = ctxA.createOscillator();
-        const g = ctxA.createGain();
-        o.type = 'square';
-        o.frequency.value = 880;
-        g.gain.value = 0;
-        o.connect(g);
-        g.connect(ctxA.destination);
-        const now = ctxA.currentTime;
-        g.gain.setValueAtTime(0.0001, now);
-        g.gain.exponentialRampToValueAtTime(0.12, now + 0.001);
-        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-        o.start(now);
-        o.stop(now + 0.24);
-      } catch (e) {
-        console.warn('Audio not available', e);
-      }
-    }
-
-    // ---------- Connection simulation ----------
-    const statusEl = document.getElementById('status');
-    function simulateConnectionSequence() {
-      statusEl.textContent = 'Bağlantı: Sunucuya istek gönderildi...';
-      setTimeout(() => statusEl.textContent = 'Bağlantı: Sunucu yanıt veriyor...', 900);
-      setTimeout(() => statusEl.textContent = 'Bağlantı: Doğrulanıyor...', 1800);
-      setTimeout(() => statusEl.textContent = 'Bağlantı: Başarılı! Sunucuya yönlendiriliyorsun...', 3000);
-      setTimeout(() => {
-        statusEl.textContent = 'Bağlantı: Tamamlandı — Hoş geldin!';
-        // celebration
-        spawnShards(cfg.width/2, cfg.height - 120, 28);
-      }, 4200);
-    }
-
-    // ---------- Main render loop ----------
-    let rafId = null;
-    function frame(now) {
-      const dt = Math.min(40, now - state.lastFrame);
-      state.lastFrame = now;
-      state.t = now;
-
-      // clear main canvas
-      ctx.clearRect(0,0,cfg.width, cfg.height);
-
-      // sky
-      drawSky();
-
-      // sun
-      drawSun(now);
-
-      // terrain
-      drawTerrain(now);
-
-      // character (centered)
-      const cx = cfg.width/2 + state.parallax.x * 0.6;
-      const cy = cfg.height/2 - 20 + state.parallax.y * 0.6;
-      drawCharacter(cx, cy, 1);
-
-      // update shards and draw
-      updateShards(dt);
-      drawShards();
-
-      rafId = requestAnimationFrame(frame);
-    }
-
-    // Start loop with proper sizing
-    function start() {
-      // set logical cfg.width/cfg.height from canvas CSS size
-      const rect = canvas.getBoundingClientRect();
-      cfg.width = rect.width;
-      cfg.height = rect.height;
-      resizeCanvases();
-      state.lastFrame = performance.now();
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(frame);
-    }
-    start();
-
-    // ---------- Button interactions ----------
-    const joinBtn = document.getElementById('joinBtn');
-    joinBtn.addEventListener('click', (e) => {
-      // ensure audio context resumed on user gesture
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    // Status simulation
+    const status=document.getElementById('status');
+    document.getElementById('joinBtn').addEventListener('click',()=>{
       playClick();
-      // micro animation
-      joinBtn.animate([
-        { transform: 'translateY(0) scale(1)' },
-        { transform: 'translateY(6px) scale(0.98)' },
-        { transform: 'translateY(0) scale(1)' }
-      ], { duration: 260, easing: 'cubic-bezier(.2,.9,.3,1)' });
-
-      // spawn shards at button center
-      const rect = joinBtn.getBoundingClientRect();
-      const canvasRect = canvas.getBoundingClientRect();
-      const cx = (rect.left + rect.right)/2 - canvasRect.left;
-      const cy = (rect.top + rect.bottom)/2 - canvasRect.top;
-      spawnShards(cx, cy, 14);
-
-      // simulate connection
-      simulateConnectionSequence();
+      status.textContent='Bağlantı: Sunucuya istek gönderildi...';
+      setTimeout(()=>status.textContent='Bağlantı: Sunucu yanıt veriyor...',1000);
+      setTimeout(()=>status.textContent='Bağlantı: Doğrulanıyor...',2000);
+      setTimeout(()=>status.textContent='Bağlantı: Başarılı! Sunucuya yönlendiriliyorsun...',3000);
+      setTimeout(()=>status.textContent='Bağlantı: Tamamlandı — Hoş geldin!',4000);
     });
-
-    // keyboard accessibility
-    joinBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        joinBtn.click();
-      }
-    });
-
-    // ---------- Performance tips applied ----------
-    // - Single main canvas for scene reduces DOM paint cost
-    // - Particle canvas separate for additive blending
-    // - requestAnimationFrame loop minimal work per frame
-    // - Shards array pruned after life ends
-    // - AudioContext created lazily on first user gesture
-
-    // ---------- Optional: direct Minecraft protocol redirect (commented) ----------
-    // To enable real server connect via minecraft:// protocol, uncomment and set ip:port
-    // Example: window.location.href = 'minecraft://play.example.com:25565';
-    // Do not enable unless you want the browser to attempt to open Minecraft client.
-
-    // ---------- End IIFE ----------
-  })();
   </script>
 </body>
-  </html>
+</html>
