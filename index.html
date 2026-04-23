@@ -9,8 +9,8 @@
     body {
       margin: 0;
       padding: 0;
-      /* ARKA PLAN BURADA: Resmin adını tam olarak yaz (Örn: ekran.png) */
-      background: #111 url('RESİM-ADI-BURAYA.jpg') no-repeat center center fixed;
+      /* ARKA PLAN BURADA: Dosya adını ekran_resmi.png olarak güncelledim */
+      background: #111 url('ekran_resmi.png') no-repeat center center fixed;
       background-size: cover;
       font-family: 'Press Start 2P', cursive;
       display: flex;
@@ -21,7 +21,7 @@
       overflow: hidden;
     }
 
-    /* Görselin üzerine hafif bir karartma atıyoruz ki yazılar okunsun */
+    /* Görselin üzerine hafif bir karartma katmanı */
     body::before {
       content: "";
       position: absolute;
@@ -131,7 +131,9 @@
   <script>
     const btn = document.getElementById('joinBtn');
     const statusText = document.getElementById('status');
-    const SUNUCU_IP = "senin_sunucu_adresin.aternos.me"; 
+    
+    // BURAYA KENDİ SUNUCU IP ADRESİNİ YAZMAYI UNUTMA KANKA
+    const SUNUCU_IP = "Xerela.aternos.me"; 
 
     function playClick() {
       try {
