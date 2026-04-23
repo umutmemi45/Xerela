@@ -1,247 +1,59 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xerela Sunucusu</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <style>
-        /* === TÜM SAYFA STİLLERİ === */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden; /* Sayfanın kaymasını engelle */
-            background-color: #000; /* Tüm web sitesinin arka planı siyah */
-            font-family: 'VT323', monospace; /* Piksel font */
-            -webkit-tap-highlight-color: transparent; /* Mobil tıklama vurgusunu kaldır */
-        }
-
-        /* === TÜM SAYFANIN ARKA PLANI ===
-           Kullanıcı "telefondan bakınca telefon gibi" meta-görünümü istediği için
-           tüm sayfanın arka planına o Minecraft manzarasını bulanık koyarak
-           gerçek telefon çerçevesini öne çıkarıyoruz. */
-        .whole-page-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* İşte o "Gerçekçi Minecraft" Manzarası linki - Bulanık */
-            background-image: url('https://i.ibb.co/pBq9Y8S/minecraft-landscape.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: -1; /* Arka planda kalsın */
-            filter: blur(5px) brightness(0.7); /* Hafif bulanık ve koyu */
-        }
-
-        /* === TELEFON ÇERÇEVESİ (Konteyner) ===
-           Bu div, web sitesinin kendisi olacak. Sanki bir telefonun ekranındayız. */
-        .phone-frame {
-            position: relative;
-            z-index: 10;
-            width: 90%; /* Mobilde genişlik */
-            max-width: 360px; /* Masaüstünde maks. telefon genişliği */
-            height: 80vh; /* Ekranın %80'i kadar yükseklik */
-            margin: 10vh auto; /* Dikeyde ortala, yatayda ortala */
-            border: 12px solid #222; /* Siyah telefon çerçevesi */
-            border-radius: 36px; /* Yuvarlak köşeler */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7); /* Derinlik hissi */
-            overflow: hidden; /* İçerik çerçeveden taşmasın */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        /* === TELEFON EKRTANI ===
-           İşte Minecraft arayüzünün durduğu yer. */
-        .phone-screen {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            /* Ekranın arka planı: toprak ve çim dokusu simülasyonu */
-            background-image: linear-gradient(to bottom, #77cc44 0%, #77cc44 15%, #8b4513 15%, #8b4513 100%);
-            background-size: 100% 120px;
-            background-repeat: repeat-x;
-            background-position: bottom;
-            background-color: #f0f0f0; /* Üst kısım beyaz/açık gri */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden;
-            padding: 20px;
-            color: #fff; /* Metin rengi */
-        }
-
-        /* == Telefon Çentiği (Notch) == */
-        .notch {
-            width: 60px;
-            height: 12px;
-            background-color: #222;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            z-index: 20;
-        }
-
-        /* === İÇERİK BÖLÜMÜ (Steve, Metinler) === */
-        .content-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-top: 40px; /* Notch'tan aşağıda başla */
-        }
-
-        /* == Steve ve Bloklar simülasyonu (BASİT CSS) ==
-           Tam deneyim için senin görselindeki resimleri GitHub'a yüklemelisin.
-           Bu kodlar Steve'i ve blokları basit kutularla taklit eder. */
-        .character-area {
-            width: 100%;
-            height: 160px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-        }
-
-        .steve-sim {
-            width: 30px;
-            height: 70px;
-            background-color: #3b3b3b; /* Basit Steve rengi */
-            border: 2px solid #000;
-            border-radius: 4px;
-        }
-
-        .flying-block-sim {
-            width: 15px;
-            height: 15px;
-            background-color: #bf6d34; /* Toprak rengi */
-            border: 2px solid #000;
-            position: absolute;
-            bottom: 60px;
-            right: 40%;
-        }
-        .block-sim-2 { bottom: 80px; right: 35%; }
-        .block-sim-3 { bottom: 100px; right: 45%; }
-
-        /* Mavi Çiçekler Simülasyonu (Basit CSS) */
-        .flower-sim {
-            width: 8px;
-            height: 15px;
-            background-color: #3b82f6; /* Mavi */
-            border-radius: 4px;
-            position: absolute;
-            bottom: 5px;
-        }
-        .flower-1 { left: 15%; }
-        .flower-2 { left: 25%; }
-        .flower-3 { right: 15%; }
-        .flower-4 { right: 25%; }
-
-        /* == Ana Metin == */
-        .main-title {
-            font-size: 2.5rem;
-            margin: -10px 0 5px 0;
-            line-height: 1;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.5); /* Hafif gölge */
-        }
-
-        /* == Alt Metin == */
-        .sub-title {
-            font-size: 1.1rem;
-            color: #ddd;
-            margin: 0;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
-        }
-
-        /* === SUNUCUYA KATIL BUTONU ===
-           Senin görselindeki toprak dokulu butonun tam simülasyonu. */
-        .join-button {
-            background-color: #8b4513; /* Kahverengi toprak */
-            color: white;
-            border: 4px solid #fff; /* Beyaz çerçeve */
-            border-radius: 4px;
-            padding: 12px 24px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            margin: 20px 0;
-            position: relative;
-            transition: all 0.1s ease; /* Tıklama efekti süresi */
-            outline: none; /* Odaklanma çizgisini kaldır */
-        }
-
-        /* Butonun üstündeki Çim Dokusu simülasyonu */
-        .join-button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 8px; /* Çim kalınlığı */
-            background-color: #77cc44; /* Yeşil çim */
-            border-radius: 2px 2px 0 0;
-        }
-
-        /* TIKLAMA EFEKTİ - Basılı tutunca */
-        .join-button:active {
-            transform: scale(0.95); /* Hafifçe küçült */
-            background-color: #723c10; /* Daha koyu toprak rengi yap */
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); /* İç gölge (basılma hissi) */
-        }
-
-        /* Ekranın en alt katmanı (Toprak dokusu için CSS gradient) */
-        .bottom-dirt-layer {
-            width: 100%;
-            height: 120px; /* CSS gradient arka planı ile aynı yükseklik */
-            position: absolute;
-            bottom: 0;
-            z-index: -1;
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <title>Xerela Sunucusu</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: url('minecraft-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-align: center;
+    }
+    .container {
+      position: relative;
+      top: 30%;
+      transform: translateY(-30%);
+    }
+    h1 {
+      font-size: 3em;
+      text-shadow: 2px 2px 5px #000;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 10px 0;
+      text-shadow: 1px 1px 3px #000;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background: #2ecc71;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #27ae60;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Xerela Sunucusu</h1>
+    <p>Sivas sunucusuna bağlanılıyor...</p>
+    <button onclick="playSound()">SUNUCUYA KATIL</button>
+  </div>
 
-    <div class="whole-page-background"></div>
-
-    <div class="phone-frame">
-        <div class="notch"></div>
-
-        <div class="phone-screen">
-            <div class="content-container">
-                <div class="character-area">
-                    <div class="steve-sim"></div>
-                    <div class="flying-block-sim"></div>
-                    <div class="flying-block-sim block-sim-2"></div>
-                    <div class="flying-block-sim block-sim-3"></div>
-                    <div class="flower-sim flower-1"></div>
-                    <div class="flower-sim flower-2"></div>
-                    <div class="flower-sim flower-3"></div>
-                    <div class="flower-sim flower-4"></div>
-                </div>
-
-                <h1 class="main-title">XERELA<br>SUNUCUSU</h1>
-
-                <p class="sub-title">Sivas sunucusuna bağlanılıyor...</p>
-
-                <button class="join-button" onclick="alert('Sunucuya katılma özelliği yakında eklenecek!')">
-                    SUNUCUYA KATIL
-                </button>
-            </div>
-
-            <div class="bottom-dirt-layer"></div>
-        </div>
-    </div>
-
+  <audio id="joinSound" src="join.mp3"></audio>
+  <script>
+    function playSound() {
+      document.getElementById('joinSound').play();
+      alert("Sunucuya bağlanılıyor!");
+    }
+  </script>
 </body>
-    </html>
-                        
+</html>
