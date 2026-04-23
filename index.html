@@ -1,61 +1,97 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benim Sitem</title>
-    <style>
-        body {
-            /* Arka plan gelmezse diye koyu bir renk ekledim */
-            background-color: #1a1a1a; 
-            /* Buradaki ismin dosya adıyla BİREBİR aynı olması şart */
-            background-image: url('IMG_20260423_172129.png'); 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            font-family: sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benim Sitem</title>
+  <style>
+    body {
+      background-color: #1a1a1a; 
+      background-image: url('resim_1776954324758.jpeg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
 
-        .container {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            color: white;
-            border: 2px solid #444;
-        }
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      color: white;
+      border: 2px solid #444;
+    }
 
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            background-color: #47a025;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #47a025;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+      border: none;
+    }
 
-        .btn:hover {
-            background-color: #5ad12f;
-            transform: scale(1.05);
-        }
-    </style>
+    .btn:hover {
+      background-color: #5ad12f;
+      transform: scale(1.05);
+    }
+
+    #statusText {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Sitemiz Aktif!</h1>
-        <p>Arka plan yüklenmiyorsa dosya adını kontrol et kanka.</p>
-        <a href="minecraft://externalServer?name=Xerela&serverAddress=xerela47.aternos.me&port=19132" class="btn">SUNUCUYA KATIL</a>
-    </div>
+  <div class="container">
+    <h1>Sitemiz Aktif!</h1>
+    <p>Arka plan yüklenmiyorsa dosya adını kontrol et kanka.</p>
+    
+    <span id="statusText"></span>
+    <button id="joinBtn" class="btn">SUNUCUYA KATIL</button>
+  </div>
 
+  <script>
+    const SUNUCU_IP = "xerela47.aternos.me";
+    const btn = document.getElementById('joinBtn');
+    const statusText = document.getElementById('statusText');
+
+    function playClick() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        osc.connect(ctx.destination);
+        osc.start(); 
+        osc.stop(ctx.currentTime + 0.1);
+      } catch(e) { console.log("Ses çalınamadı"); }
+    }
+
+    btn.addEventListener('click', () => {
+      playClick();
+      statusText.textContent = "Bağlanılıyor...";
+      statusText.style.color = "#fbbf24";
+      setTimeout(() => {
+        // İŞTE O ÖZEL LİNK: Sadece burası güncellendi, sistem aynı.
+        window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=19132`;
+        
+        statusText.textContent = "Minecraft Açılıyor!";
+        statusText.style.color = "#4ade80";
+      }, 1000);
+    });
+  </script>
 </body>
 </html>
