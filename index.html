@@ -5,90 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xerela Sunucusu</title>
   <style>
-    /* Google Fonts'tan Minecraft'a benzeyen bir font çektim */
+    /* Minecraft tarzı taş fontu */
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
     body {
       background-color: #1a1a1a; 
-      /* Arka plan resmin duruyor */
-      background-image: url('IMG_20260423_172129.png'); 
+      background-image: url('resim_1776954324758.jpeg'); 
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
       margin: 0;
-      /* O siyah çerçeveyi kaldırmak için container'ı sildim, her şeyi body'e ortaladım */
       display: flex;
-      flex-direction: column; /* Üst üste gelmeleri için */
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between; /* İsim tepede, buton dipte olsun diye */
+      justify-content: space-between; /* İsim tepede, buton işaretlediğin yerde */
       height: 100vh;
-      padding: 5vh 0; /* Tepeden ve dipten biraz boşluk */
+      overflow: hidden;
+      font-family: sans-serif;
     }
 
+    /* Üst taraftaki taş efektli isim */
     h1 {
-      margin: 0;
-      /* İşte o Minecraft taş efekti */
+      margin-top: 10vh; /* İşaretlediğin üst boşluğa denk gelir */
       font-family: 'Press Start 2P', cursive;
-      font-size: 32px; /* Daha büyük ve net */
-      color: #b0b0b0; /* Taş grisi */
+      font-size: 28px;
+      color: #bfbfbf; /* Taş rengi */
       text-transform: uppercase;
-      letter-spacing: 2px;
-      /* 3D ve gölge efekti */
       text-shadow: 
-        2px 2px 0 #000,
-        -2px -2px 0 #000,
-        2px -2px 0 #000,
-        -2px 2px 0 #000,
-        0px 2px 0 #000,
-        0px -2px 0 #000,
-        2px 0px 0 #000,
-        -2px 0px 0 #000,
-        4px 4px 0 #555; /* Taş detayı */
+        3px 3px 0 #333,
+        -1px -1px 0 #eee; /* Kabartma efekti */
     }
 
+    /* Alt taraftaki buton alanı */
     .btn-container {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding-bottom: 5vh; /* Alttan boşluk */
+      margin-bottom: 12vh; /* İşaretlediğin çimenli toprağın tam üzerine denk getirir */
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
 
     .btn {
-      /* Butonu kocaman yaptık */
-      width: 90%; 
-      max-width: 600px;
-      padding: 25px; /* Daha kalın ve büyük */
+      width: 80%;
+      max-width: 320px;
+      padding: 12px; /* Daha zarif ve ince olması için kıstım */
       background-color: #47a025;
       color: white;
       text-decoration: none;
-      border-radius: 15px; /* Hafif yuvarlak */
+      border-radius: 5px; /* Daha modern ve zarif köşe */
       font-weight: bold;
-      transition: 0.3s;
+      transition: 0.2s;
       cursor: pointer;
-      border: 4px solid #2a6116; /* Koyu yeşil çerçeve */
-      font-size: 24px; /* Yazı da büyüdü */
-      font-family: sans-serif;
-      text-align: center;
-      box-shadow: 0 8px 0 #2a6116; /* Minecraft buton gölgesi */
+      border: 2px solid #2a6116;
+      font-size: 14px; /* Zarif durması için yazı boyutunu ayarladım */
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 0 #2a6116;
     }
 
     .btn:hover {
       background-color: #5ad12f;
-      transform: translateY(2px); /* Basılma efekti */
-      box-shadow: 0 6px 0 #2a6116;
+      transform: scale(1.02);
     }
 
     .btn:active {
-        transform: translateY(6px); /* Tam basılma efekti */
-        box-shadow: 0 2px 0 #2a6116;
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #2a6116;
     }
 
     #statusText {
       position: absolute;
-      bottom: 2vh;
+      bottom: 5vh;
       color: white;
+      font-size: 12px;
       font-weight: bold;
+      background: rgba(0,0,0,0.3);
+      padding: 2px 10px;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -119,14 +112,12 @@
 
     btn.addEventListener('click', () => {
       playClick();
-      statusText.textContent = "Bağlanılıyor...";
+      statusText.textContent = "BAĞLANILIYOR...";
       statusText.style.color = "#fbbf24";
       
       setTimeout(() => {
-        // Özel link
         window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=19132`;
-        
-        statusText.textContent = "Minecraft Açılıyor!";
+        statusText.textContent = "MINECRAFT AÇILIYOR!";
         statusText.style.color = "#4ade80";
       }, 1000);
     });
