@@ -1,161 +1,141 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Xerela Sunucusu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xerela - Sunucu Paneli</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      /* ARKA PLAN BURADA: Dosya adını ekran_resmi.png olarak güncelledim */
-      background: #111 url('IMG_20260423_172129.png') no-repeat center center fixed;
+      background-color: #1a1a1a; 
+      background-image: url(''); 
       background-size: cover;
-      font-family: 'Press Start 2P', cursive;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      margin: 0;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Görselin üzerine hafif bir karartma katmanı */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: -1;
-    }
-
-    .content {
+    .container {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 40px;
+      border-radius: 25px;
       text-align: center;
-      z-index: 1;
-      margin-bottom: 60px;
+      color: white;
+      border: 3px solid #47a025;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      max-width: 400px;
     }
 
-    .title {
-      font-size: 26px;
-      color: #fff;
-      text-transform: uppercase;
-      text-shadow: 5px 5px 0px #373737, 2px 2px 15px rgba(0,0,0,0.5);
-      margin-bottom: 15px;
-      line-height: 1.3;
-    }
-
-    .subtitle {
-      font-size: 10px;
-      color: #ddd;
-      background: rgba(0,0,0,0.5);
-      padding: 5px 10px;
-      display: inline-block;
-      border-radius: 4px;
-    }
-
-    .footer {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 1;
-    }
-
-    .mc-button-wrapper {
-      position: relative;
-      width: 85%;
-      max-width: 380px;
-      display: flex;
-      align-items: center;
-    }
-
-    .dirt-block {
-      position: absolute;
-      left: 10px;
-      width: 35px;
-      height: 35px;
-      background-image: url('https://minecraft.wiki/images/Thumb_Dirt_Path_JE2_BE2.png'); 
-      background-size: contain;
-      background-repeat: no-repeat;
-      z-index: 2;
-      image-rendering: pixelated; 
-    }
-
-    .mc-button {
-      width: 100%;
-      padding: 22px 20px 22px 55px;
-      background: #6aaa49;
-      border: 4px solid #1e4514;
-      color: #fff;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 12px;
+    .server-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      margin: 20px 0;
+      border: 1px dashed #777;
       cursor: pointer;
-      box-shadow: inset -4px -4px 0px #3e782a, inset 4px 4px 0px #8ed46b, 0 10px 20px rgba(0,0,0,0.3);
-      text-align: left;
-      transition: all 0.1s;
+      transition: 0.3s;
     }
 
-    .mc-button:active {
-      transform: scale(0.98);
-      background: #4e8a35;
-      box-shadow: inset 4px 4px 0px #1e4514;
+    .server-info:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
 
-    .status-box {
-      margin-top: 20px;
-      font-size: 9px;
-      color: #fff;
-      background: rgba(0,0,0,0.8);
-      padding: 12px 25px;
-      border: 2px solid #555;
-      border-radius: 2px;
+    .server-ip {
+      font-size: 1.2em;
+      color: #5ad12f;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    #statusText {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .btn {
+      display: block;
+      margin-top: 15px;
+      padding: 15px 20px;
+      background-color: #47a025;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: 0.3s;
+      font-size: 1.1em;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background-color: #5ad12f;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #5ad12f;
     }
   </style>
 </head>
 <body>
 
-    <div class="content">
-      <div class="title">XERELA<br>SUNUCUSU</div>
-      <div class="subtitle">Sivas sunucusuna bağlanılıyor...</div>
+  <div class="container">
+    <h1>Xerela Sunucusu</h1>
+    
+    <div class="server-info" id="copyArea">
+      <span class="server-ip">xerela47.aternos.me</span>
+      <span style="font-size: 0.9em; color: #ccc;">Port: 19132</span>
     </div>
 
-    <div class="footer">
-      <div class="mc-button-wrapper">
-        <div class="dirt-block"></div>
-        <button id="joinBtn" class="mc-button">SUNUCUYA KATIL</button>
-      </div>
-      <div id="status" class="status-box">Durum: Hazır</div>
-    </div>
+    <span id="statusText">Bağlanmaya Hazır!</span>
+
+    <button id="joinBtn" class="btn">SUNUCUYA KATIL</button>
+  </div>
 
   <script>
+    const SUNUCU_IP = "xerela47.aternos.me";
+    const PORT = "19132"; // Kendi portunla değiştirebilirsin
     const btn = document.getElementById('joinBtn');
-    const statusText = document.getElementById('status');
-    
-    // BURAYA KENDİ SUNUCU IP ADRESİNİ YAZMAYI UNUTMA KANKA
-    const SUNUCU_IP = "Xerela.aternos.me"; 
+    const statusText = document.getElementById('statusText');
+    const copyArea = document.getElementById('copyArea');
 
+    // Senin o meşhur ses kodun
     function playClick() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
-        const g = ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(150, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.1);
-        g.gain.setValueAtTime(0.1, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        osc.connect(g); g.connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + 0.1);
+        osc.connect(ctx.destination);
+        osc.start(); 
+        osc.stop(ctx.currentTime + 0.1);
       } catch(e) { console.log("Ses çalınamadı"); }
     }
 
+    // IP Kopyalama
+    copyArea.addEventListener('click', () => {
+      navigator.clipboard.writeText(SUNUCU_IP);
+      statusText.textContent = "IP Kopyalandı!";
+      statusText.style.color = "#fbbf24";
+      setTimeout(() => {
+        statusText.textContent = "Bağlanmaya Hazır!";
+        statusText.style.color = "white";
+      }, 2000);
+    });
+
+    // Ana Katılma Fonksiyonu
     btn.addEventListener('click', () => {
       playClick();
       statusText.textContent = "Bağlanılıyor...";
       statusText.style.color = "#fbbf24";
+      
       setTimeout(() => {
-        window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=19132`;
+        // İşte %100 çalışan o link yapısı
+        window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=${PORT}`;
+        
         statusText.textContent = "Minecraft Açılıyor!";
         statusText.style.color = "#4ade80";
       }, 1000);
