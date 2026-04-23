@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Benim Sitem</title>
+  <title>Xerela Sunucusu</title>
   <style>
     body {
       background-color: #1a1a1a; 
-      background-image: url('IMG_20260423_172129.png'); 
+      background-image: url(''); 
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -21,26 +21,36 @@
     }
 
     .container {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 30px;
+      background: rgba(0, 0, 0, 0.6); /* Biraz daha şeffaf yaptım resim görünsün diye */
+      padding: 40px;
       border-radius: 20px;
       text-align: center;
       color: white;
-      border: 2px solid #444;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 80%;
+      max-width: 350px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 1px;
     }
 
     .btn {
       display: inline-block;
-      margin-top: 20px;
-      padding: 12px 24px;
+      margin-top: 25px;
+      padding: 15px 30px;
       background-color: #47a025;
       color: white;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: bold;
       transition: 0.3s;
       cursor: pointer;
       border: none;
+      font-size: 16px;
+      width: 100%;
     }
 
     .btn:hover {
@@ -50,19 +60,19 @@
 
     #statusText {
       display: block;
-      margin-top: 10px;
-      font-weight: bold;
+      margin-top: 15px;
+      font-size: 14px;
+      min-height: 20px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>Sitemiz Aktif!</h1>
-    <p>Arka plan yüklenmiyorsa dosya adını kontrol et kanka.</p>
+    <h1>XERELA SUNUCUSU</h1>
     
-    <span id="statusText"></span>
     <button id="joinBtn" class="btn">SUNUCUYA KATIL</button>
+    <span id="statusText"></span>
   </div>
 
   <script>
@@ -77,15 +87,16 @@
         osc.connect(ctx.destination);
         osc.start(); 
         osc.stop(ctx.currentTime + 0.1);
-      } catch(e) { console.log("Ses çalınamadı"); }
+      } catch(e) { console.log("Ses çalınmadı"); }
     }
 
     btn.addEventListener('click', () => {
       playClick();
       statusText.textContent = "Bağlanılıyor...";
       statusText.style.color = "#fbbf24";
+      
       setTimeout(() => {
-        // SADECE BURAYI ÖZEL LİNKLE DEĞİŞTİRDİM, GERİSİ SENİN KODUNUN AYNISI
+        // İşte o özel link, sistemi hiç bozmadan burada çalışıyor
         window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=19132`;
         
         statusText.textContent = "Minecraft Açılıyor!";
