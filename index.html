@@ -3,55 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benim Sitem</title>
+    <title>Benim Dünyam</title>
     <style>
         body {
-            /* Arka plan resmini buraya ekliyoruz */
-            background-image: url('image_1776954324758.jpeg);
+            /* Arka plan ayarları burada */
+            background-image: url('');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             background-repeat: no-repeat;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            color: white;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-box {
+            background: rgba(0, 0, 0, 0.7); /* Yazılar net görünsün diye hafif karartma */
+            padding: 40px;
+            border-radius: 20px;
             text-align: center;
-        }
-
-        .container {
-            background: rgba(0, 0, 0, 0.6); /* Yazıların okunması için hafif siyah şeffaf arka plan */
-            padding: 20px;
-            border-radius: 15px;
-        }
-
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
 
-        .btn:hover {
-            background-color: #0056b3;
+        .btn-minecraft {
+            display: inline-block;
+            background-color: #47a025; /* Minecraft yeşili */
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-bottom: 4px solid #2e6617;
+        }
+
+        .btn-minecraft:hover {
+            background-color: #56c22d;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Hoş Geldin Kanka!</h1>
-        <p>Sitemiz tam gaz devam ediyor.</p>
-        <a href="https://www.minecraft.net" class="btn">Minecraft'a Git</a>
+    <div class="main-box">
+        <h1>Hoş Geldin!</h1>
+        <p>Sitemiz başarıyla geri yüklendi.</p>
+        <a href="https://www.minecraft.net" class="btn-minecraft">MINECRAFT'A GİT</a>
     </div>
 
 </body>
