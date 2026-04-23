@@ -1,163 +1,47 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Xerela Sunucusu — Pro Mod</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin:0;
-      background:#0b1220;
-      font-family:'Press Start 2P', monospace;
-      color:#fff;
-      overflow:hidden;
-    }
-    .wrap {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      height:100vh;
-    }
-    .phone {
-      width:420px;
-      border-radius:28px;
-      background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.06));
-      box-shadow:0 30px 80px rgba(0,0,0,0.6);
-      position:relative;
-      overflow:hidden;
-    }
-    canvas {
-      width:100%;
-      height:560px;
-      display:block;
-      border-radius:16px;
-    }
-    .ui {
-      position:absolute;
-      top:20px;
-      width:100%;
-      text-align:center;
-      z-index:10;
-    }
-    .title {
-      font-size:18px;
-      text-shadow:0 8px 20px rgba(0,0,0,0.6);
-    }
-    .subtitle {
-      font-size:12px;
-      margin-top:8px;
-      color:#e6f7ff;
-    }
-    .controls {
-      position:absolute;
-      bottom:20px;
-      width:100%;
-      text-align:center;
-      z-index:10;
-    }
-    .join-btn {
-      padding:12px 18px;
-      background:linear-gradient(180deg,#ff9a3c 0%, #ff7a1a 100%);
-      border:3px solid rgba(0,0,0,0.25);
-      border-radius:10px;
-      box-shadow:0 10px 0 rgba(0,0,0,0.35);
-      color:#fff;
-      cursor:pointer;
-    }
-    .status {
-      margin-top:10px;
-      font-size:11px;
-      background:rgba(0,0,0,0.28);
-      border-radius:999px;
-      display:inline-block;
-      padding:6px 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benim Dünyam</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Resim ismini buraya tam olarak yaz (örneğin resim_1.jpg) */
+            background: url('resim.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="phone">
-      <canvas id="scene"></canvas>
-      <div class="ui">
-        <div class="title">XERELA SUNUCUSU</div>
-        <div class="subtitle">Sivas sunucusuna bağlanılıyor...</div>
-      </div>
-      <div class="controls">
-        <button id="joinBtn" class="join-btn">SUNUCUYA KATIL</button>
-        <div id="status" class="status">Bağlantı: Bekleniyor</div>
-      </div>
+    <div class="container">
+        <h1>Hoş Geldiniz</h1>
+        <p>Proje başarıyla yüklendi! Şık bir başlangıç yapıyoruz.</p>
     </div>
-  </div>
-  <script>
-    const canvas=document.getElementById('scene');
-    const ctx=canvas.getContext('2d');
-    canvas.width=420;canvas.height=560;
-    let t=0;
-    function draw(){
-      ctx.clearRect(0,0,420,560);
-      // Sky gradient
-      let g=ctx.createLinearGradient(0,0,0,560);
-      g.addColorStop(0,'#7ec0ee');
-      g.addColorStop(1,'#f6d6a8');
-      ctx.fillStyle=g;
-      ctx.fillRect(0,0,420,560);
-      // Sun
-      ctx.beginPath();
-      ctx.arc(320,100,50+Math.sin(t/50)*5,0,Math.PI*2);
-      ctx.fillStyle='#ffd36b';
-      ctx.fill();
-      // Terrain
-      ctx.fillStyle='#5fa033';
-      ctx.fillRect(0,440,420,120);
-      ctx.fillStyle='#8b5a2b';
-      ctx.fillRect(0,520,420,40);
-      // Character
-      ctx.fillStyle='#3b82c4';
-      ctx.fillRect(170,300,80,80);
-      ctx.fillStyle='#f2c08a';
-      ctx.fillRect(180,240,60,60);
-      ctx.fillStyle='#0b2a3a';
-      ctx.fillRect(195,260,10,10);
-      ctx.fillRect(215,260,10,10);
-      // Pickaxe
-      ctx.save();
-      ctx.translate(250,250);
-      ctx.rotate(Math.sin(t/30)*0.2);
-      ctx.fillStyle='#6b4b2a';
-      ctx.fillRect(-2,0,6,60);
-      ctx.fillStyle='#9ad3ff';
-      ctx.fillRect(-12,-10,24,20);
-      ctx.restore();
-      t++;
-      requestAnimationFrame(draw);
-    }
-    draw();
-
-    // Audio click
-    let audioCtx=null;
-    function playClick(){
-      if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-      const o=audioCtx.createOscillator();
-      const g=audioCtx.createGain();
-      o.type='square';o.frequency.value=880;
-      o.connect(g);g.connect(audioCtx.destination);
-      g.gain.setValueAtTime(0.001,audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.1,audioCtx.currentTime+0.01);
-      g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.2);
-      o.start();o.stop(audioCtx.currentTime+0.25);
-    }
-
-    // Status simulation
-    const status=document.getElementById('status');
-    document.getElementById('joinBtn').addEventListener('click',()=>{
-      playClick();
-      status.textContent='Bağlantı: Sunucuya istek gönderildi...';
-      setTimeout(()=>status.textContent='Bağlantı: Sunucu yanıt veriyor...',1000);
-      setTimeout(()=>status.textContent='Bağlantı: Doğrulanıyor...',2000);
-      setTimeout(()=>status.textContent='Bağlantı: Başarılı! Sunucuya yönlendiriliyorsun...',3000);
-      setTimeout(()=>status.textContent='Bağlantı: Tamamlandı — Hoş geldin!',4000);
-    });
-  </script>
 </body>
 </html>
