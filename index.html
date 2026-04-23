@@ -1,145 +1,61 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xerela - Sunucu Paneli</title>
-  <style>
-    body {
-      background-color: #1a1a1a; 
-      background-image: url('IMG_20260423_172129.png'); 
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benim Sitem</title>
+    <style>
+        body {
+            /* Arka plan gelmezse diye koyu bir renk ekledim */
+            background-color: #1a1a1a; 
+            /* Buradaki ismin dosya adıyla BİREBİR aynı olması şart */
+            background-image: url(''); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: sans-serif;
+        }
 
-    .container {
-      background: rgba(0, 0, 0, 0.85);
-      padding: 40px;
-      border-radius: 25px;
-      text-align: center;
-      color: white;
-      border: 3px solid #47a025;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      max-width: 400px;
-    }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            border: 2px solid #444;
+        }
 
-    .server-info {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 12px;
-      margin: 20px 0;
-      border: 1px dashed #777;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #47a025;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
 
-    .server-info:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .server-ip {
-      font-size: 1.2em;
-      color: #5ad12f;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    #statusText {
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .btn {
-      display: block;
-      margin-top: 15px;
-      padding: 15px 20px;
-      background-color: #47a025;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: bold;
-      transition: 0.3s;
-      font-size: 1.1em;
-      cursor: pointer;
-      border: none;
-      width: 100%;
-    }
-
-    .btn:hover {
-      background-color: #5ad12f;
-      transform: scale(1.05);
-      box-shadow: 0 0 15px #5ad12f;
-    }
-  </style>
+        .btn:hover {
+            background-color: #5ad12f;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Xerela Sunucusu</h1>
-    
-    <div class="server-info" id="copyArea">
-      <span class="server-ip">xerela47.aternos.me</span>
-      <span style="font-size: 0.9em; color: #ccc;">Port: 19132</span>
+    <div class="container">
+        <h1>Sitemiz Aktif!</h1>
+        <p>Arka plan yüklenmiyorsa dosya adını kontrol et kanka.</p>
+        <a href="minecraft://externalServer?name=Xerela&serverAddress=xerela47.aternos.me&port=19132" class="btn">SUNUCUYA KATIL</a>
     </div>
 
-    <span id="statusText">Bağlanmaya Hazır!</span>
-
-    <button id="joinBtn" class="btn">SUNUCUYA KATIL</button>
-  </div>
-
-  <script>
-    const SUNUCU_IP = "xerela47.aternos.me";
-    const PORT = "19132"; // Kendi portunla değiştirebilirsin
-    const btn = document.getElementById('joinBtn');
-    const statusText = document.getElementById('statusText');
-    const copyArea = document.getElementById('copyArea');
-
-    // Senin o meşhur ses kodun
-    function playClick() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        osc.connect(ctx.destination);
-        osc.start(); 
-        osc.stop(ctx.currentTime + 0.1);
-      } catch(e) { console.log("Ses çalınamadı"); }
-    }
-
-    // IP Kopyalama
-    copyArea.addEventListener('click', () => {
-      navigator.clipboard.writeText(SUNUCU_IP);
-      statusText.textContent = "IP Kopyalandı!";
-      statusText.style.color = "#fbbf24";
-      setTimeout(() => {
-        statusText.textContent = "Bağlanmaya Hazır!";
-        statusText.style.color = "white";
-      }, 2000);
-    });
-
-    // Ana Katılma Fonksiyonu
-    btn.addEventListener('click', () => {
-      playClick();
-      statusText.textContent = "Bağlanılıyor...";
-      statusText.style.color = "#fbbf24";
-      
-      setTimeout(() => {
-        // İşte %100 çalışan o link yapısı
-        window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=${PORT}`;
-        
-        statusText.textContent = "Minecraft Açılıyor!";
-        statusText.style.color = "#4ade80";
-      }, 1000);
-    });
-  </script>
 </body>
 </html>
