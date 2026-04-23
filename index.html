@@ -3,207 +3,111 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Xerela Sunucusu</title>
+  <title>Xerela Sunucusu — Pro</title>
 
-  <!-- Pixel / Minecraft tarzı font (Google Fonts) -->
+  <!-- Minecraft-pixel font benzeri (Press Start 2P) -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <style>
     /* ---------- Reset ---------- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html,body { height: 100%; }
+    html, body { height: 100%; }
     body {
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background: linear-gradient(#7ec0ee 0%, #7ec0ee 40%, #6bb24a 40%, #6bb24a 60%, #3b7a2f 60%, #3b7a2f 100%);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      background: #0b1220;
       color: #fff;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    /* ---------- Page layout ---------- */
-    .stage {
-      min-height: 100vh;
+    /* ---------- Layout ---------- */
+    .wrap {
+      width: 100%;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 24px;
       position: relative;
     }
 
-    /* ---------- Minecraft-like layered background using SVG pattern ---------- */
-    .bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      display: grid;
-      grid-template-rows: 1fr auto;
-    }
-
-    /* Sky with sun */
-    .sky {
-      background: linear-gradient(180deg, #87ceeb 0%, #7ec0ee 50%, #f6d6a8 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    .sun {
-      position: absolute;
-      right: 8%;
-      top: 8%;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff3b0 0%, #ffd36b 30%, #ffb84d 60%, rgba(255,184,77,0) 100%);
-      filter: blur(6px);
-      transform: translateY(0);
-      animation: sunFloat 8s ease-in-out infinite;
-    }
-    @keyframes sunFloat {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(6px); }
-      100% { transform: translateY(0); }
-    }
-
-    /* Blocky terrain strip */
-    .terrain {
-      background-image:
-        linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px),
-        linear-gradient(#6bb24a, #4f8f2f);
-      background-size: 40px 40px, 100% 100%;
-      height: 160px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 12px;
-      box-shadow: inset 0 8px 30px rgba(0,0,0,0.25);
-    }
-
-    /* Ground blocks (pixel grid) */
-    .blocks {
-      width: min(1100px, 92%);
-      height: 120px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-      gap: 0;
-      transform: translateY(6px);
-    }
-    .block {
-      height: 120px;
-      background: linear-gradient(#7bbf4a, #5fa033);
-      border-right: 2px solid rgba(0,0,0,0.12);
-      box-shadow: inset 0 -8px 0 rgba(0,0,0,0.08);
-      position: relative;
-    }
-    .block::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 36px;
-      background: linear-gradient(#8b5a2b, #6b3f1a);
-      border-top: 2px solid rgba(255,255,255,0.03);
-    }
-
-    /* ---------- Card (phone mockup) ---------- */
-    .card {
-      position: relative;
-      z-index: 2;
+    /* Card / phone mockup container */
+    .phone {
       width: min(420px, 92%);
       max-width: 420px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.06));
       border-radius: 28px;
-      padding: 18px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 6px 18px rgba(0,0,0,0.25);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,0.06);
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      position: relative;
       overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* Phone screen area */
-    .phone-screen {
-      background: linear-gradient(180deg, #0b1220 0%, #0f1724 100%);
+    /* Canvas fills the phone screen */
+    #scene {
+      width: 100%;
+      height: 560px;
+      display: block;
       border-radius: 16px;
-      padding: 18px;
-      min-height: 520px;
+      background: linear-gradient(180deg,#7ec0ee 0%, #f6d6a8 70%);
+      box-shadow: inset 0 6px 18px rgba(0,0,0,0.25);
+    }
+
+    /* UI overlay */
+    .ui {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      top: 18px;
+      z-index: 6;
+      text-align: center;
+      pointer-events: none;
+    }
+    .title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 18px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      pointer-events: none;
+    }
+    .subtitle {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #e6f7ff;
+      opacity: 0.95;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+      pointer-events: none;
+    }
+
+    /* Bottom controls */
+    .controls {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
+      gap: 10px;
+      z-index: 7;
+      pointer-events: auto;
     }
 
-    /* In-screen background: stylized Minecraft scene using SVG */
-    .in-screen-bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      opacity: 0.95;
-      display: grid;
-      grid-template-rows: 1fr auto;
-    }
-    .in-screen-sky {
-      background: linear-gradient(180deg, #7ec0ee 0%, #f6d6a8 70%);
-      position: relative;
-    }
-    .in-screen-terrain {
-      background: linear-gradient(#6bb24a, #3b7a2f);
-      height: 160px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    /* Title and description */
-    .title {
-      position: relative;
-      z-index: 2;
-      margin-top: 28px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 20px;
-      letter-spacing: 1px;
-      color: #fff;
-      text-transform: uppercase;
-      text-shadow: 0 6px 18px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.03);
-    }
-    .subtitle {
-      position: relative;
-      z-index: 2;
-      margin-top: 12px;
-      color: #e6f7ff;
-      font-size: 12px;
-      opacity: 0.95;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.45);
-    }
-
-    /* Character (SVG) container */
-    .character-wrap {
-      position: relative;
-      z-index: 2;
-      width: 220px;
-      height: 220px;
-      margin-top: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.6));
-    }
-
-    /* Join button (3D blocky) */
-    .join-button {
-      position: relative;
-      z-index: 2;
-      margin: 22px 0 12px 0;
+    .join-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 14px 22px;
+      gap: 10px;
+      padding: 12px 18px;
       background: linear-gradient(180deg,#ff9a3c 0%, #ff7a1a 100%);
       color: #fff;
-      font-weight: 700;
       font-family: 'Press Start 2P', monospace;
       font-size: 12px;
       text-transform: uppercase;
@@ -213,16 +117,10 @@
       cursor: pointer;
       user-select: none;
       transition: transform 160ms cubic-bezier(.2,.9,.3,1), box-shadow 160ms;
-      transform-origin: center;
     }
-    .join-button:active { transform: translateY(6px); box-shadow: 0 4px 0 rgba(0,0,0,0.35); }
+    .join-btn:active { transform: translateY(6px); box-shadow: 0 4px 0 rgba(0,0,0,0.35); }
 
-    /* Small status pill */
-    .status-pill {
-      position: relative;
-      z-index: 2;
-      display: inline-block;
-      margin-top: 8px;
+    .status {
       padding: 6px 10px;
       background: rgba(0,0,0,0.28);
       border-radius: 999px;
@@ -232,248 +130,430 @@
       text-shadow: 0 1px 0 rgba(0,0,0,0.4);
     }
 
-    /* Block-shatter effect container */
-    .shatter-layer {
+    /* Particle canvas overlay (for shatter) */
+    #particles {
       position: absolute;
-      z-index: 3;
       inset: 0;
+      z-index: 8;
       pointer-events: none;
-      overflow: visible;
-    }
-    .shard {
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(#ff9a3c, #ff7a1a);
-      transform-origin: center;
-      opacity: 0;
-      will-change: transform, opacity;
     }
 
     /* Footer small text */
     .footer {
-      position: relative;
-      z-index: 2;
+      position: absolute;
+      bottom: 6px;
+      left: 12px;
       font-size: 10px;
       color: rgba(255,255,255,0.7);
-      margin-bottom: 8px;
-      text-align: center;
+      z-index: 9;
     }
 
-    /* Responsive tweaks */
+    /* Responsive */
     @media (max-width: 520px) {
-      .card { border-radius: 18px; padding: 12px; }
-      .phone-screen { min-height: 520px; padding: 14px; }
+      #scene { height: 520px; }
       .title { font-size: 14px; }
-      .character-wrap { width: 180px; height: 180px; }
-      .join-button { padding: 12px 18px; font-size: 10px; }
+      .join-btn { padding: 10px 14px; font-size: 10px; }
     }
   </style>
 </head>
 <body>
-  <main class="stage" role="main" aria-labelledby="page-title">
-    <!-- Decorative layered background -->
-    <div class="bg" aria-hidden="true">
-      <div class="sky">
-        <div class="sun" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="phone" role="region" aria-label="Sunucu kartı">
+      <canvas id="scene" width="420" height="560" aria-hidden="false"></canvas>
+      <canvas id="particles" width="420" height="560" aria-hidden="true"></canvas>
+
+      <div class="ui" aria-hidden="false">
+        <div class="title" id="pageTitle">XERELA SUNUCUSU</div>
+        <div class="subtitle" id="pageSubtitle">Sivas sunucusuna bağlanılıyor...</div>
       </div>
-      <div class="terrain">
-        <div class="blocks" aria-hidden="true">
-          <!-- Generate many blocks for the ground -->
-          <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
-          <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
-          <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
-        </div>
+
+      <div class="controls" role="group" aria-label="Kontroller">
+        <button id="joinBtn" class="join-btn" aria-label="Sunucuya katıl">SUNUCUYA KATIL</button>
+        <div id="status" class="status" role="status" aria-live="polite">Bağlantı: Bekleniyor</div>
       </div>
+
+      <div class="footer">Xerela • Sivas Sunucusu • 2026</div>
     </div>
-
-    <!-- Card / phone mockup -->
-    <section class="card" aria-label="Sunucu kartı">
-      <div class="phone-screen" role="region" aria-labelledby="page-title">
-        <!-- In-screen decorative background -->
-        <div class="in-screen-bg" aria-hidden="true">
-          <div class="in-screen-sky"></div>
-          <div class="in-screen-terrain"></div>
-        </div>
-
-        <!-- Content -->
-        <header>
-          <h1 id="page-title" class="title">XERELA SUNUCUSU</h1>
-          <div class="subtitle">Sivas sunucusuna bağlanılıyor...</div>
-        </header>
-
-        <!-- Character SVG (pixel-style Steve-like) -->
-        <div class="character-wrap" aria-hidden="true">
-          <!-- Simple pixel-art SVG character (original, non-trademarked) -->
-          <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Karakter">
-            <defs>
-              <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#9ad3ff"/>
-                <stop offset="1" stop-color="#4aa6ff"/>
-              </linearGradient>
-            </defs>
-
-            <!-- shadow -->
-            <ellipse cx="110" cy="190" rx="60" ry="18" fill="rgba(0,0,0,0.45)"/>
-
-            <!-- body (blocky) -->
-            <rect x="70" y="90" width="80" height="80" fill="#3b82c4" stroke="#1f4f7a" stroke-width="2"/>
-            <!-- head -->
-            <rect x="80" y="40" width="60" height="60" fill="#f2c08a" stroke="#b07a4a" stroke-width="2"/>
-            <!-- eyes -->
-            <rect x="95" y="60" width="10" height="10" fill="#0b2a3a"/>
-            <rect x="115" y="60" width="10" height="10" fill="#0b2a3a"/>
-            <!-- pickaxe (floating) -->
-            <g transform="translate(150,40) rotate(18)">
-              <rect x="-2" y="0" width="6" height="60" fill="#6b4b2a" />
-              <rect x="-12" y="-10" width="24" height="20" fill="#9ad3ff" />
-              <rect x="-12" y="-6" width="24" height="6" fill="#4aa6ff" opacity="0.9"/>
-            </g>
-
-            <!-- floating blocks -->
-            <rect x="30" y="30" width="28" height="28" fill="#7bbf4a" stroke="#5fa033" stroke-width="2"/>
-            <rect x="170" y="120" width="28" height="28" fill="#7bbf4a" stroke="#5fa033" stroke-width="2"/>
-            <rect x="30" y="150" width="28" height="28" fill="#7bbf4a" stroke="#5fa033" stroke-width="2"/>
-          </svg>
-        </div>
-
-        <!-- Join button and status -->
-        <div style="display:flex;flex-direction:column;align-items:center;width:100%;">
-          <button id="joinBtn" class="join-button" aria-label="Sunucuya katıl">
-            <span>SUNUCUYA KATIL</span>
-          </button>
-
-          <div id="status" class="status-pill" role="status" aria-live="polite">Bağlantı: Bekleniyor</div>
-        </div>
-
-        <!-- Shatter layer for visual effect -->
-        <div class="shatter-layer" id="shatterLayer" aria-hidden="true"></div>
-
-        <footer class="footer">Xerela • Sivas Sunucusu • 2026</footer>
-      </div>
-    </section>
-  </main>
+  </div>
 
   <script>
-    /* ---------- Pro-level JS: ses, animasyon, bağlantı simülasyonu ---------- */
+  /* ============================
+     Pro-level single-file implementation
+     - Single main canvas for scene
+     - Particle canvas for shatter
+     - Procedural block terrain
+     - SVG-like pixel character drawn on canvas
+     - WebAudio procedural click
+     - requestAnimationFrame optimized loop
+     - Non-blocking connection simulation
+     ============================ */
 
-    // Utility: play a short click/pop sound using WebAudio (no external file)
-    function playClickSound() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = 'square';
-        o.frequency.setValueAtTime(880, ctx.currentTime);
-        g.gain.setValueAtTime(0, ctx.currentTime);
-        g.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.001);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-        o.connect(g);
-        g.connect(ctx.destination);
-        o.start();
-        o.stop(ctx.currentTime + 0.26);
-      } catch (e) {
-        // Fallback: short beep via alert audio (rare)
-        console.warn('AudioContext not available', e);
+  (function () {
+    'use strict';
+
+    // ---------- Config ----------
+    const cfg = {
+      width: 420,
+      height: 560,
+      pixelRatioCap: 2,
+      terrainRows: 4,
+      blockSize: 40,
+      skyColorTop: '#7ec0ee',
+      skyColorBottom: '#f6d6a8',
+      sunColor: '#ffd36b',
+      fpsLimit: 60,
+      parallaxStrength: 0.02
+    };
+
+    // ---------- Canvas setup ----------
+    const canvas = document.getElementById('scene');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const pCanvas = document.getElementById('particles');
+    const pCtx = pCanvas.getContext('2d', { alpha: true });
+
+    function resizeCanvases() {
+      const dpr = Math.min(window.devicePixelRatio || 1, cfg.pixelRatioCap);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      pCanvas.width = canvas.width;
+      pCanvas.height = canvas.height;
+      pCanvas.style.width = canvas.style.width;
+      pCanvas.style.height = canvas.style.height;
+      pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', resizeCanvases);
+    resizeCanvases();
+
+    // ---------- Utility ----------
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+    // ---------- Scene state ----------
+    const state = {
+      t: 0,
+      lastFrame: performance.now(),
+      mouse: { x: cfg.width/2, y: cfg.height/2 },
+      parallax: { x: 0, y: 0 },
+      shards: []
+    };
+
+    // ---------- Parallax ----------
+    window.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) / rect.width;
+      const my = (e.clientY - rect.top) / rect.height;
+      state.parallax.x = (mx - 0.5) * cfg.parallaxStrength * rect.width;
+      state.parallax.y = (my - 0.5) * cfg.parallaxStrength * rect.height;
+    });
+
+    // ---------- Procedural terrain generation ----------
+    function generateTerrain(cols) {
+      const blocks = [];
+      for (let i = 0; i < cols; i++) {
+        const height = Math.floor(rand(1, cfg.terrainRows + 1));
+        blocks.push({ h: height, variation: Math.random() });
+      }
+      return blocks;
+    }
+    const cols = Math.ceil(cfg.width / cfg.blockSize) + 6;
+    const terrain = generateTerrain(cols);
+
+    // ---------- Draw functions ----------
+    function drawSky() {
+      const g = ctx.createLinearGradient(0, 0, 0, cfg.height);
+      g.addColorStop(0, cfg.skyColorTop);
+      g.addColorStop(1, cfg.skyColorBottom);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, cfg.width, cfg.height);
+    }
+
+    function drawSun(t) {
+      const sunX = cfg.width * 0.78 + Math.sin(t * 0.0006) * 18;
+      const sunY = cfg.height * 0.18 + Math.cos(t * 0.0009) * 8;
+      const r = 48;
+      const g = ctx.createRadialGradient(sunX, sunY, r*0.1, sunX, sunY, r*1.8);
+      g.addColorStop(0, '#fff3b0');
+      g.addColorStop(0.3, '#ffd36b');
+      g.addColorStop(1, 'rgba(255,184,77,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, r*1.6, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    function drawTerrain(t) {
+      const baseY = cfg.height - 120;
+      const blockW = cfg.blockSize;
+      for (let i = -3; i < cols; i++) {
+        const b = terrain[i + 3] || { h: 1, variation: 0 };
+        const x = i * blockW + (state.parallax.x * 0.2);
+        const h = b.h;
+        // draw stacked blocks
+        for (let r = 0; r < h; r++) {
+          const y = baseY - r * blockW;
+          // color variation
+          const g1 = ctx.createLinearGradient(x, y, x+blockW, y+blockW);
+          g1.addColorStop(0, '#7bbf4a');
+          g1.addColorStop(1, '#5fa033');
+          ctx.fillStyle = g1;
+          ctx.fillRect(x, y, blockW, blockW);
+          // top highlight
+          ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(x, y, blockW, blockW);
+        }
+        // dirt layer
+        ctx.fillStyle = '#8b5a2b';
+        ctx.fillRect(x, baseY + blockW - 12, blockW, 12);
+        ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+        ctx.strokeRect(x, baseY + blockW - 12, blockW, 12);
       }
     }
 
-    // Shatter effect: create small shards that fly out from button
-    function createShatter(x, y, count = 18) {
-      const layer = document.getElementById('shatterLayer');
-      const rect = layer.getBoundingClientRect();
+    // ---------- Pixel-style character drawing on canvas ----------
+    function drawCharacter(cx, cy, scale = 1) {
+      // simple blocky character (non-trademarked)
+      const s = 1 * scale;
+      // shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.45)';
+      ctx.beginPath();
+      ctx.ellipse(cx, cy + 80*s, 60*s, 18*s, 0, 0, Math.PI*2);
+      ctx.fill();
+
+      // body
+      ctx.fillStyle = '#3b82c4';
+      ctx.fillRect(cx - 40*s, cy - 10*s, 80*s, 80*s);
+      ctx.strokeStyle = '#1f4f7a';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cx - 40*s, cy - 10*s, 80*s, 80*s);
+
+      // head
+      ctx.fillStyle = '#f2c08a';
+      ctx.fillRect(cx - 30*s, cy - 70*s, 60*s, 60*s);
+      ctx.strokeStyle = '#b07a4a';
+      ctx.strokeRect(cx - 30*s, cy - 70*s, 60*s, 60*s);
+
+      // eyes
+      ctx.fillStyle = '#0b2a3a';
+      ctx.fillRect(cx - 15*s, cy - 50*s, 10*s, 10*s);
+      ctx.fillRect(cx + 5*s, cy - 50*s, 10*s, 10*s);
+
+      // pickaxe (floating)
+      ctx.save();
+      ctx.translate(cx + 60*s, cy - 40*s);
+      ctx.rotate(Math.sin(state.t * 0.002) * 0.18);
+      ctx.fillStyle = '#6b4b2a';
+      ctx.fillRect(-2*s, 0, 6*s, 60*s);
+      ctx.fillStyle = '#9ad3ff';
+      ctx.fillRect(-12*s, -10*s, 24*s, 20*s);
+      ctx.fillStyle = '#4aa6ff';
+      ctx.globalAlpha = 0.95;
+      ctx.fillRect(-12*s, -6*s, 24*s, 6*s);
+      ctx.restore();
+
+      // floating blocks
+      ctx.fillStyle = '#7bbf4a';
+      ctx.fillRect(cx - 120*s, cy - 120*s, 28*s, 28*s);
+      ctx.fillRect(cx + 80*s, cy + 20*s, 28*s, 28*s);
+      ctx.fillRect(cx - 120*s, cy + 40*s, 28*s, 28*s);
+      ctx.strokeStyle = '#5fa033';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cx - 120*s, cy - 120*s, 28*s, 28*s);
+      ctx.strokeRect(cx + 80*s, cy + 20*s, 28*s, 28*s);
+      ctx.strokeRect(cx - 120*s, cy + 40*s, 28*s, 28*s);
+      ctx.globalAlpha = 1;
+    }
+
+    // ---------- Particles (shatter) ----------
+    function spawnShards(x, y, count = 18) {
       for (let i = 0; i < count; i++) {
-        const shard = document.createElement('div');
-        shard.className = 'shard';
-        // randomize size and color
-        const size = 10 + Math.round(Math.random() * 18);
-        shard.style.width = size + 'px';
-        shard.style.height = size + 'px';
-        shard.style.left = (x - rect.left - size/2) + 'px';
-        shard.style.top = (y - rect.top - size/2) + 'px';
-        shard.style.background = `linear-gradient(${Math.random()*360}deg, #ffb07a, #ff7a1a)`;
-        shard.style.opacity = '1';
-        layer.appendChild(shard);
-
-        // animate using Web Animations API
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 80 + Math.random() * 160;
-        const rotate = (Math.random() * 720) - 360;
-        shard.animate([
-          { transform: 'translate(0px,0px) rotate(0deg) scale(1)', opacity: 1 },
-          { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist - 20}px) rotate(${rotate}deg) scale(0.6)`, opacity: 0 }
-        ], {
-          duration: 700 + Math.random()*400,
-          easing: 'cubic-bezier(.2,.9,.3,1)'
+        const angle = rand(0, Math.PI*2);
+        const speed = rand(2, 8);
+        const life = rand(600, 1200);
+        state.shards.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - rand(1,4),
+          size: rand(6, 18),
+          rot: rand(0, Math.PI*2),
+          drot: rand(-0.2, 0.2),
+          t0: performance.now(),
+          life,
+          colorA: `hsl(${Math.floor(rand(20,40))}deg 100% 60%)`,
+          colorB: `hsl(${Math.floor(rand(10,20))}deg 100% 45%)`
         });
-
-        // remove after animation
-        setTimeout(() => shard.remove(), 1200);
       }
     }
 
-    // Simulate connecting to server with status updates
-    function simulateConnection() {
-      const status = document.getElementById('status');
-      status.textContent = 'Bağlantı: Sunucuya istek gönderildi...';
-      setTimeout(() => status.textContent = 'Bağlantı: Sunucu yanıt veriyor...', 900);
-      setTimeout(() => status.textContent = 'Bağlantı: Doğrulanıyor...', 1800);
-      setTimeout(() => status.textContent = 'Bağlantı: Başarılı! Sunucuya yönlendiriliyorsun...', 3000);
+    function updateShards(dt) {
+      const now = performance.now();
+      for (let i = state.shards.length - 1; i >= 0; i--) {
+        const s = state.shards[i];
+        const age = now - s.t0;
+        if (age > s.life) { state.shards.splice(i, 1); continue; }
+        s.vy += 0.18 * (dt/16); // gravity scaled
+        s.x += s.vx * (dt/16);
+        s.y += s.vy * (dt/16);
+        s.rot += s.drot * (dt/16);
+      }
+    }
+
+    function drawShards() {
+      pCtx.clearRect(0,0,canvas.width,canvas.height);
+      pCtx.save();
+      pCtx.globalCompositeOperation = 'lighter';
+      for (const s of state.shards) {
+        pCtx.save();
+        pCtx.translate(s.x, s.y);
+        pCtx.rotate(s.rot);
+        const g = pCtx.createLinearGradient(-s.size/2, -s.size/2, s.size/2, s.size/2);
+        g.addColorStop(0, s.colorA);
+        g.addColorStop(1, s.colorB);
+        pCtx.fillStyle = g;
+        pCtx.fillRect(-s.size/2, -s.size/2, s.size, s.size);
+        pCtx.restore();
+      }
+      pCtx.restore();
+    }
+
+    // ---------- WebAudio procedural click ----------
+    let audioCtx = null;
+    function ensureAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+    function playClick() {
+      try {
+        const ctxA = ensureAudio();
+        const o = ctxA.createOscillator();
+        const g = ctxA.createGain();
+        o.type = 'square';
+        o.frequency.value = 880;
+        g.gain.value = 0;
+        o.connect(g);
+        g.connect(ctxA.destination);
+        const now = ctxA.currentTime;
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(0.12, now + 0.001);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+        o.start(now);
+        o.stop(now + 0.24);
+      } catch (e) {
+        console.warn('Audio not available', e);
+      }
+    }
+
+    // ---------- Connection simulation ----------
+    const statusEl = document.getElementById('status');
+    function simulateConnectionSequence() {
+      statusEl.textContent = 'Bağlantı: Sunucuya istek gönderildi...';
+      setTimeout(() => statusEl.textContent = 'Bağlantı: Sunucu yanıt veriyor...', 900);
+      setTimeout(() => statusEl.textContent = 'Bağlantı: Doğrulanıyor...', 1800);
+      setTimeout(() => statusEl.textContent = 'Bağlantı: Başarılı! Sunucuya yönlendiriliyorsun...', 3000);
       setTimeout(() => {
-        status.textContent = 'Bağlantı: Tamamlandı — Hoş geldin!';
-        // small celebration shards
-        const btn = document.getElementById('joinBtn');
-        const rect = btn.getBoundingClientRect();
-        createShatter(rect.left + rect.width/2, rect.top + rect.height/2, 28);
+        statusEl.textContent = 'Bağlantı: Tamamlandı — Hoş geldin!';
+        // celebration
+        spawnShards(cfg.width/2, cfg.height - 120, 28);
       }, 4200);
     }
 
-    // Main button handler
-    document.getElementById('joinBtn').addEventListener('click', function (e) {
-      // Play sound
-      playClickSound();
+    // ---------- Main render loop ----------
+    let rafId = null;
+    function frame(now) {
+      const dt = Math.min(40, now - state.lastFrame);
+      state.lastFrame = now;
+      state.t = now;
 
-      // Button press micro-animation
-      this.animate([
+      // clear main canvas
+      ctx.clearRect(0,0,cfg.width, cfg.height);
+
+      // sky
+      drawSky();
+
+      // sun
+      drawSun(now);
+
+      // terrain
+      drawTerrain(now);
+
+      // character (centered)
+      const cx = cfg.width/2 + state.parallax.x * 0.6;
+      const cy = cfg.height/2 - 20 + state.parallax.y * 0.6;
+      drawCharacter(cx, cy, 1);
+
+      // update shards and draw
+      updateShards(dt);
+      drawShards();
+
+      rafId = requestAnimationFrame(frame);
+    }
+
+    // Start loop with proper sizing
+    function start() {
+      // set logical cfg.width/cfg.height from canvas CSS size
+      const rect = canvas.getBoundingClientRect();
+      cfg.width = rect.width;
+      cfg.height = rect.height;
+      resizeCanvases();
+      state.lastFrame = performance.now();
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(frame);
+    }
+    start();
+
+    // ---------- Button interactions ----------
+    const joinBtn = document.getElementById('joinBtn');
+    joinBtn.addEventListener('click', (e) => {
+      // ensure audio context resumed on user gesture
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      playClick();
+      // micro animation
+      joinBtn.animate([
         { transform: 'translateY(0) scale(1)' },
         { transform: 'translateY(6px) scale(0.98)' },
         { transform: 'translateY(0) scale(1)' }
       ], { duration: 260, easing: 'cubic-bezier(.2,.9,.3,1)' });
 
-      // Create shatter at click position
-      createShatter(e.clientX, e.clientY, 12);
+      // spawn shards at button center
+      const rect = joinBtn.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+      const cx = (rect.left + rect.right)/2 - canvasRect.left;
+      const cy = (rect.top + rect.bottom)/2 - canvasRect.top;
+      spawnShards(cx, cy, 14);
 
-      // Start simulated connection
-      simulateConnection();
+      // simulate connection
+      simulateConnectionSequence();
     });
 
-    // Accessibility: allow Enter/Space to trigger
-    document.getElementById('joinBtn').addEventListener('keydown', function (e) {
+    // keyboard accessibility
+    joinBtn.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        this.click();
+        joinBtn.click();
       }
     });
 
-    // Optional: small parallax on mouse move for depth
-    (function enableParallax() {
-      const card = document.querySelector('.card');
-      if (!card) return;
-      window.addEventListener('mousemove', (ev) => {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        const cx = w/2, cy = h/2;
-        const dx = (ev.clientX - cx) / cx;
-        const dy = (ev.clientY - cy) / cy;
-        card.style.transform = `translate3d(${dx*6}px, ${dy*6}px, 0)`;
-      });
-      window.addEventListener('mouseleave', () => card.style.transform = '');
-    })();
+    // ---------- Performance tips applied ----------
+    // - Single main canvas for scene reduces DOM paint cost
+    // - Particle canvas separate for additive blending
+    // - requestAnimationFrame loop minimal work per frame
+    // - Shards array pruned after life ends
+    // - AudioContext created lazily on first user gesture
 
-    // Ensure focus styles for keyboard users
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Tab') document.body.classList.add('show-focus');
-    });
+    // ---------- Optional: direct Minecraft protocol redirect (commented) ----------
+    // To enable real server connect via minecraft:// protocol, uncomment and set ip:port
+    // Example: window.location.href = 'minecraft://play.example.com:25565';
+    // Do not enable unless you want the browser to attempt to open Minecraft client.
+
+    // ---------- End IIFE ----------
+  })();
   </script>
 </body>
-                                       </html>
+  </html>
