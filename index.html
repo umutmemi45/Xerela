@@ -1,118 +1,211 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Xerela Sunucusu</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Free Skin Catalog</title>
+    <style>
+        /* GENEL TASARIM (DARK MODE & NEON) */
+        body {
+            background-color: #0b0e14;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
-    body {
-      background-color: #1a1a1a; 
-      background-image: url('IMG_20260423_172129.png'); 
-      background-size: cover;
-      background-position: center;
-      margin: 0;
-      padding: 0;
-      /* İşte kaydırmayı bitiren büyü: */
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden; 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: sans-serif;
-    }
+        header {
+            background: #161b22;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #00f2ff;
+            box-shadow: 0 0 15px #00f2ff55;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    /* Üst taraftaki taş efektli isim */
-    h1 {
-      margin-top: 50px; /* Üstten tam kararında boşluk */
-      font-family: 'Press Start 2P', cursive;
-      font-size: 26px;
-      color: #bfbfbf;
-      text-transform: uppercase;
-      text-shadow: 3px 3px 0 #333, -1px -1px 0 #eee;
-      z-index: 10;
-    }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00f2ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-    /* Buton tam ortalarda ve kaydırmasız */
-    .btn-container {
-      position: absolute;
-      top: 75%; /* Sayfayı aşağı kaydırmana gerek kalmadan tam o çimenli yere denk gelir */
-      transform: translateY(-50%);
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        #searchBar {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            width: 250px;
+            transition: 0.3s;
+        }
 
-    .btn {
-      width: 75%;
-      max-width: 300px;
-      padding: 14px;
-      background-color: #47a025;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      border: 2px solid #2a6116;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 0 #2a6116;
-      transition: 0.1s;
-    }
+        #searchBar:focus {
+            outline: none;
+            border-color: #00f2ff;
+            box-shadow: 0 0 10px #00f2ff;
+        }
 
-    .btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #2a6116;
-    }
+        /* SKIN KARTLARI (GRID) */
+        .container {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
 
-    #statusText {
-      margin-top: 10px;
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      text-shadow: 1px 1px 2px black;
-    }
-  </style>
+        .skin-card {
+            background: #1c2128;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #30363d;
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative;
+        }
+
+        .skin-card:hover {
+            transform: translateY(-5px);
+            border-color: #39ff14;
+        }
+
+        .skin-img {
+            width: 100%;
+            height: 180px;
+            background: #2d333b;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .free { background: #39ff14; color: black; }
+        .premium { background: #ff0055; color: white; }
+
+        .info { padding: 15px; text-align: center; }
+        .info h3 { margin: 0 0 10px; font-size: 1.1rem; }
+
+        .btn {
+            display: block;
+            background: #00f2ff;
+            color: black;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn:hover { background: #39ff14; }
+        .btn.disabled { background: #555; cursor: not-allowed; }
+
+        /* ADBLOCK PANEL */
+        #adblock-popup {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+        }
+
+        .popup-content {
+            background: #1c2128;
+            padding: 40px;
+            border: 2px solid #ff0055;
+            border-radius: 20px;
+            box-shadow: 0 0 30px #ff0055;
+        }
+
+        .popup-content h2 { color: #ff0055; }
+    </style>
 </head>
 <body>
 
-  <h1>XERELA</h1>
-  
-  <div class="btn-container">
-    <button id="joinBtn" class="btn">SUNUCUYA KATIL</button>
-    <span id="statusText"></span>
-  </div>
+    <div id="adblock-popup">
+        <div class="popup-content">
+            <h2>DUR! AD-BLOCK TESPİT EDİLDİ</h2>
+            <p>Ücretsiz skinleri görebilmek için lütfen reklam engelleyiciyi kapatın.</p>
+            <p>Kapattıktan sonra sayfayı yenileyin.</p>
+        </div>
+    </div>
 
-  <script>
-    const SUNUCU_IP = "xerela47.aternos.me";
-    const btn = document.getElementById('joinBtn');
-    const statusText = document.getElementById('statusText');
+    <header>
+        <div class="logo">RO-SKIN INDEX</div>
+        <input type="text" id="searchBar" placeholder="Skin veya yüz ara..." onkeyup="filterSkins()">
+    </header>
 
-    function playClick() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        osc.connect(ctx.destination);
-        osc.start(); 
-        osc.stop(ctx.currentTime + 0.1);
-      } catch(e) { console.log("Ses çalınmadı"); }
-    }
+    <div class="container" id="skinGrid">
+        </div>
 
-    btn.addEventListener('click', () => {
-      playClick();
-      statusText.textContent = "BAĞLANILIYOR...";
-      statusText.style.color = "#fbbf24";
-      
-      setTimeout(() => {
-        window.location.href = `minecraft://externalServer?name=Xerela&serverAddress=${SUNUCU_IP}&port=19132`;
-        statusText.textContent = "MINECRAFT AÇILIYOR!";
-        statusText.style.color = "#4ade80";
-      }, 800);
-    });
-  </script>
+    <div class="ad-zone" style="height: 1px; width: 1px; position: absolute; left: -999px;">&nbsp;</div>
+
+    <script>
+        // Örnek Veri Seti
+        const skins = [
+            { name: "Gülen Yüz", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Smile+Face", link: "https://www.roblox.com/catalog/7074786/Smile" },
+            { name: "Mavi Kask", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Blue+Helmet", link: "https://www.roblox.com/catalog/63690008/Pal-Hair" },
+            { name: "Uzaylı Başlığı", type: "PREMIUM", img: "https://via.placeholder.com/200x180/2d333b/ff0055?text=Alien+Head", link: "#" },
+            { name: "Güneş Gözlüğü", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Sunglasses", link: "https://www.roblox.com/catalog/376527350/Orange-Shades" },
+            { name: "Altın Kanatlar", type: "PREMIUM", img: "https://via.placeholder.com/200x180/2d333b/ff0055?text=Gold+Wings", link: "#" },
+            { name: "Klasik Şapka", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Classic+Cap", link: "https://www.roblox.com/catalog/60721062/Roblox-Baseball-Cap" }
+        ];
+
+        const grid = document.getElementById('skinGrid');
+
+        // Kartları Oluşturma
+        function loadSkins() {
+            grid.innerHTML = skins.map(skin => `
+                <div class="skin-card">
+                    <span class="badge ${skin.type === 'FREE' ? 'free' : 'premium'}">${skin.type}</span>
+                    <img src="${skin.img}" class="skin-img">
+                    <div class="info">
+                        <h3>${skin.name}</h3>
+                        <a href="${skin.link}" class="btn ${skin.type === 'PREMIUM' ? 'disabled' : ''}" target="_blank">
+                            ${skin.type === 'FREE' ? 'Kütüphaneye Ekle' : 'Çok Yakında'}
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Arama Fonksiyonu
+        function filterSkins() {
+            const term = document.getElementById('searchBar').value.toLowerCase();
+            const cards = document.querySelectorAll('.skin-card');
+            cards.forEach(card => {
+                const name = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = name.includes(term) ? 'block' : 'none';
+            });
+        }
+
+        // AdBlock Kontrolü (Basit Mantık)
+        window.onload = function() {
+            loadSkins();
+            setTimeout(() => {
+                const adZone = document.querySelector('.ad-zone');
+                if (!adZone || adZone.clientHeight === 0) {
+                    document.getElementById('adblock-popup').style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+            }, 500);
+        };
+    </script>
 </body>
 </html>
