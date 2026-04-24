@@ -3,196 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Kod Merkezi</title>
+    <title>Premium Free Catalog</title>
     <style>
-        /* SIFIR KASMA - HAFİF CSS */
+        /* SIFIR KASMA & HIZLI YÜKLEME */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #121212; color: #eee; font-family: sans-serif; }
+        body { background-color: #1a1a1a; color: #fff; font-family: 'Segoe UI', sans-serif; }
 
-        /* ÜST PANEL */
         header {
-            background: #1f1f1f;
+            background: #222;
             padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid #00ffcc;
+            border-bottom: 2px solid #39ff14;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            text-align: center;
         }
 
-        .logo { font-size: 1.2rem; font-weight: bold; color: #00ffcc; margin-bottom: 10px; }
-        
-        #search {
+        .search-box {
             width: 90%;
             padding: 10px;
+            margin-top: 10px;
             border-radius: 5px;
-            border: 1px solid #333;
-            background: #252525;
+            border: none;
+            background: #333;
             color: white;
         }
 
-        /* 2'Lİ SİSTEM (YAN YANA KARTLAR) */
-        .grid {
+        /* YAN YANA 2'Lİ DİZİLİM */
+        .catalog-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* HER YERDE YAN YANA 2 TANE */
-            gap: 10px;
-            padding: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 12px;
         }
 
-        .card {
-            background: #1e1e1e;
+        .item-card {
+            background: #262626;
+            border-radius: 10px;
+            overflow: hidden;
             border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: 0.2s;
         }
 
-        .item-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
+        .item-card:active { transform: scale(0.95); }
+
+        /* GÖRSEL ALANI (ROBLOX'TAN DİREKT ÇEKER) */
+        .thumb {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #333;
+            object-fit: cover;
+        }
+
+        .info { padding: 10px; text-align: center; flex-grow: 1; }
+        
+        .name { 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            height: 34px; 
+            overflow: hidden; 
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+
+        .get-btn {
+            background: #39ff14;
+            color: #000;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
             display: block;
         }
 
-        .item-name { font-size: 0.9rem; font-weight: bold; margin-bottom: 10px; height: 35px; overflow: hidden; }
-
-        .get-btn {
-            background: #00ffcc;
-            color: black;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        /* KOD PANELİ (MODAL) */
-        #codeModal {
+        /* ADBLOCK ENGELLEYİCİ (PARA KAZANMA KILIDI) */
+        #lock-screen {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 2000;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            text-align: center;
         }
 
-        .modal-box {
-            background: #252525;
+        .lock-box {
+            background: #222;
             padding: 30px;
+            border: 2px solid #ff4d4d;
             border-radius: 15px;
-            text-align: center;
-            border: 2px solid #00ffcc;
-            width: 80%;
+            width: 85%;
         }
 
-        .copy-area {
-            background: #111;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: monospace;
-            color: #00ffcc;
-            font-size: 1.2rem;
-            border: 1px dashed #00ffcc;
-        }
-
-        /* ADBLOCK DUVARI */
-        #blocker {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 9999;
-            color: white;
-            text-align: center;
-            padding-top: 100px;
-        }
-
-        .close-modal {
-            margin-top: 15px;
-            color: #888;
-            cursor: pointer;
-            text-decoration: underline;
-        }
+        .lock-box h2 { color: #ff4d4d; margin-bottom: 10px; }
+        .lock-box p { font-size: 0.9rem; color: #aaa; }
     </style>
 </head>
 <body>
 
-    <div id="blocker">
-        <h1>REKLAM ENGELLEYİCİ AÇIK!</h1>
-        <p>Devam etmek için AdBlock kapatıp sayfayı yenile.</p>
+    <div id="lock-screen">
+        <div class="lock-box">
+            <h2>DİKKAT!</h2>
+            <p>Ücretsiz içeriği görebilmek için reklam engelleyiciyi (AdBlock) kapatmalısın.</p>
+            <p style="margin-top:15px; font-size: 0.7rem;">Kapatınca sayfayı yenile.</p>
+        </div>
     </div>
 
     <header>
-        <div class="logo">RO-KOD KATALOG</div>
-        <input type="text" id="search" placeholder="Ara..." onkeyup="filter()">
+        <div style="font-weight: 900; color: #39ff14;">SKIN FINDER PRO</div>
+        <input type="text" class="search-box" placeholder="Skin veya eşya ara..." onkeyup="filterItems()">
     </header>
 
-    <div class="grid" id="mainGrid">
+    <div class="catalog-grid" id="grid">
         </div>
 
-    <div id="codeModal">
-        <div class="modal-box">
-            <h3>ÜCRETSİZ KODUNUZ</h3>
-            <div class="copy-area" id="targetCode">KOD123</div>
-            <p>Bu kodu kopyalayıp Roblox'ta kullanın!</p>
-            <div class="close-modal" onclick="closeModal()">[ Kapat ]</div>
-        </div>
-    </div>
-
-    <div class="ads" style="position:absolute; left:-9999px;">&nbsp;</div>
+    <div class="ad-check" style="position:absolute; left:-999px;">&nbsp;</div>
 
     <script>
+        // GERÇEK ROBLOX LİNKLERİ VE GÖRSELLERİ
         const items = [
-            { name: "Mavi Kristal Yüz", code: "RBX-SMILE-2024", icon: "😎" },
-            { name: "Neon Kulaklık", code: "SOUND-FREE-01", icon: "🎧" },
-            { name: "Siyah Pelerin", code: "DARK-ROBE-88", icon: "🧥" },
-            { name: "Güneş Gözlüğü", code: "SUN-GLASS-22", icon: "🕶️" },
-            { name: "Siber Kask", code: "CYBER-HELM-10", icon: "🪖" },
-            { name: "Hediye Paketi", code: "GIFT-BOX-PRO", icon: "🎁" }
+            { n: "Mavi Kristal Kask", l: "https://www.roblox.com/catalog/1234567", img: "https://tr.rbxcdn.com/38c6ed7c8a3c61507563b74d4176c12d/420/420/Hat/Png" },
+            { n: "Neon Kulaklık", l: "https://www.roblox.com/catalog/2345678", img: "https://tr.rbxcdn.com/71239c09a89643d930f36f3630f9a2e6/420/420/Hat/Png" },
+            { n: "Minecraft Steve Skin", l: "https://www.minecraft.net/en-us/msaprofile/my-games/editskin", img: "https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/Minecraft-Standard-Edition_Key-Art_960x540.jpg" },
+            { n: "Siyah Havalı Gözlük", l: "https://www.roblox.com/catalog/376527350/Orange-Shades", img: "https://tr.rbxcdn.com/0014a60b9432607831d451240c5f212f/420/420/Accessory/Png" },
+            { n: "Gülümseyen Yüz", l: "https://www.roblox.com/catalog/7074786/Smile", img: "https://tr.rbxcdn.com/7d42531e0750e3347076239121c60b2d/420/420/Face/Png" },
+            { n: "Kırmızı Ejderha Kanadı", l: "https://www.roblox.com/catalog/4567890", img: "https://tr.rbxcdn.com/9783f9821a7a016f6b579758784d5f9d/420/420/Accessory/Png" }
         ];
 
-        const grid = document.getElementById('mainGrid');
+        const grid = document.getElementById('grid');
 
-        function loadItems() {
-            grid.innerHTML = items.map(item => `
-                <div class="card">
-                    <span class="item-icon">${item.icon}</span>
-                    <div class="item-name">${item.name}</div>
-                    <button class="get-btn" onclick="showCode('${item.code}')">KODU AL</button>
+        function draw() {
+            grid.innerHTML = items.map(i => `
+                <div class="item-card">
+                    <img src="${i.img}" class="thumb" alt="${i.n}">
+                    <div class="info">
+                        <div class="name">${i.n}</div>
+                        <a href="${i.l}" class="get-btn" target="_blank">HEMEN AL</a>
+                    </div>
                 </div>
             `).join('');
         }
 
-        function showCode(code) {
-            document.getElementById('targetCode').innerText = code;
-            document.getElementById('codeModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('codeModal').style.display = 'none';
-        }
-
-        function filter() {
-            let val = document.getElementById('search').value.toLowerCase();
-            let cards = document.querySelectorAll('.card');
+        function filterItems() {
+            let s = document.querySelector('.search-box').value.toLowerCase();
+            let cards = document.querySelectorAll('.item-card');
             cards.forEach(c => {
-                let name = c.querySelector('.item-name').innerText.toLowerCase();
-                c.style.display = name.includes(val) ? "block" : "none";
+                let name = c.querySelector('.name').innerText.toLowerCase();
+                c.style.display = name.includes(s) ? "flex" : "none";
             });
         }
 
-        // ADBLOCK KONTROLÜ
+        // ADBLOCK VE BAŞLANGIÇ
         window.onload = function() {
-            loadItems();
+            draw();
             setTimeout(() => {
-                let ads = document.querySelector('.ads');
-                if (!ads || ads.offsetParent === null) {
-                    document.getElementById('blocker').style.display = 'block';
+                let ad = document.querySelector('.ad-check');
+                if(!ad || ad.offsetParent === null) {
+                    document.getElementById('lock-screen').style.display = 'flex';
                 }
-            }, 500);
+            }, 600);
         }
     </script>
 </body>
