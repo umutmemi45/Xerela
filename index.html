@@ -3,209 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Free Skin Catalog</title>
+    <title>Roblox Kod Merkezi</title>
     <style>
-        /* GENEL TASARIM (DARK MODE & NEON) */
-        body {
-            background-color: #0b0e14;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
+        /* SIFIR KASMA - HAFİF CSS */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #121212; color: #eee; font-family: sans-serif; }
 
+        /* ÜST PANEL */
         header {
-            background: #161b22;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #00f2ff;
-            box-shadow: 0 0 15px #00f2ff55;
+            background: #1f1f1f;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #00ffcc;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #00f2ff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        #searchBar {
-            background: #0d1117;
-            border: 1px solid #30363d;
+        .logo { font-size: 1.2rem; font-weight: bold; color: #00ffcc; margin-bottom: 10px; }
+        
+        #search {
+            width: 90%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: #252525;
             color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            width: 250px;
-            transition: 0.3s;
         }
 
-        #searchBar:focus {
-            outline: none;
-            border-color: #00f2ff;
-            box-shadow: 0 0 10px #00f2ff;
-        }
-
-        /* SKIN KARTLARI (GRID) */
-        .container {
-            padding: 2rem;
+        /* 2'Lİ SİSTEM (YAN YANA KARTLAR) */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr; /* HER YERDE YAN YANA 2 TANE */
+            gap: 10px;
+            padding: 10px;
         }
 
-        .skin-card {
-            background: #1c2128;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #30363d;
-            transition: transform 0.3s, border-color 0.3s;
+        .card {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
             position: relative;
         }
 
-        .skin-card:hover {
-            transform: translateY(-5px);
-            border-color: #39ff14;
-        }
-
-        .skin-img {
-            width: 100%;
-            height: 180px;
-            background: #2d333b;
-            object-fit: cover;
-        }
-
-        .badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .free { background: #39ff14; color: black; }
-        .premium { background: #ff0055; color: white; }
-
-        .info { padding: 15px; text-align: center; }
-        .info h3 { margin: 0 0 10px; font-size: 1.1rem; }
-
-        .btn {
+        .item-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
             display: block;
-            background: #00f2ff;
-            color: black;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: 0.2s;
         }
 
-        .btn:hover { background: #39ff14; }
-        .btn.disabled { background: #555; cursor: not-allowed; }
+        .item-name { font-size: 0.9rem; font-weight: bold; margin-bottom: 10px; height: 35px; overflow: hidden; }
 
-        /* ADBLOCK PANEL */
-        #adblock-popup {
+        .get-btn {
+            background: #00ffcc;
+            color: black;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* KOD PANELİ (MODAL) */
+        #codeModal {
+            display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            flex-direction: column;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+        }
+
+        .modal-box {
+            background: #252525;
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
+            border: 2px solid #00ffcc;
+            width: 80%;
         }
 
-        .popup-content {
-            background: #1c2128;
-            padding: 40px;
-            border: 2px solid #ff0055;
-            border-radius: 20px;
-            box-shadow: 0 0 30px #ff0055;
+        .copy-area {
+            background: #111;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            color: #00ffcc;
+            font-size: 1.2rem;
+            border: 1px dashed #00ffcc;
         }
 
-        .popup-content h2 { color: #ff0055; }
+        /* ADBLOCK DUVARI */
+        #blocker {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            color: white;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .close-modal {
+            margin-top: 15px;
+            color: #888;
+            cursor: pointer;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
-    <div id="adblock-popup">
-        <div class="popup-content">
-            <h2>DUR! AD-BLOCK TESPİT EDİLDİ</h2>
-            <p>Ücretsiz skinleri görebilmek için lütfen reklam engelleyiciyi kapatın.</p>
-            <p>Kapattıktan sonra sayfayı yenileyin.</p>
-        </div>
+    <div id="blocker">
+        <h1>REKLAM ENGELLEYİCİ AÇIK!</h1>
+        <p>Devam etmek için AdBlock kapatıp sayfayı yenile.</p>
     </div>
 
     <header>
-        <div class="logo">RO-SKIN INDEX</div>
-        <input type="text" id="searchBar" placeholder="Skin veya yüz ara..." onkeyup="filterSkins()">
+        <div class="logo">RO-KOD KATALOG</div>
+        <input type="text" id="search" placeholder="Ara..." onkeyup="filter()">
     </header>
 
-    <div class="container" id="skinGrid">
+    <div class="grid" id="mainGrid">
         </div>
 
-    <div class="ad-zone" style="height: 1px; width: 1px; position: absolute; left: -999px;">&nbsp;</div>
+    <div id="codeModal">
+        <div class="modal-box">
+            <h3>ÜCRETSİZ KODUNUZ</h3>
+            <div class="copy-area" id="targetCode">KOD123</div>
+            <p>Bu kodu kopyalayıp Roblox'ta kullanın!</p>
+            <div class="close-modal" onclick="closeModal()">[ Kapat ]</div>
+        </div>
+    </div>
+
+    <div class="ads" style="position:absolute; left:-9999px;">&nbsp;</div>
 
     <script>
-        // Örnek Veri Seti
-        const skins = [
-            { name: "Gülen Yüz", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Smile+Face", link: "https://www.roblox.com/catalog/7074786/Smile" },
-            { name: "Mavi Kask", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Blue+Helmet", link: "https://www.roblox.com/catalog/63690008/Pal-Hair" },
-            { name: "Uzaylı Başlığı", type: "PREMIUM", img: "https://via.placeholder.com/200x180/2d333b/ff0055?text=Alien+Head", link: "#" },
-            { name: "Güneş Gözlüğü", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Sunglasses", link: "https://www.roblox.com/catalog/376527350/Orange-Shades" },
-            { name: "Altın Kanatlar", type: "PREMIUM", img: "https://via.placeholder.com/200x180/2d333b/ff0055?text=Gold+Wings", link: "#" },
-            { name: "Klasik Şapka", type: "FREE", img: "https://via.placeholder.com/200x180/2d333b/39ff14?text=Classic+Cap", link: "https://www.roblox.com/catalog/60721062/Roblox-Baseball-Cap" }
+        const items = [
+            { name: "Mavi Kristal Yüz", code: "RBX-SMILE-2024", icon: "😎" },
+            { name: "Neon Kulaklık", code: "SOUND-FREE-01", icon: "🎧" },
+            { name: "Siyah Pelerin", code: "DARK-ROBE-88", icon: "🧥" },
+            { name: "Güneş Gözlüğü", code: "SUN-GLASS-22", icon: "🕶️" },
+            { name: "Siber Kask", code: "CYBER-HELM-10", icon: "🪖" },
+            { name: "Hediye Paketi", code: "GIFT-BOX-PRO", icon: "🎁" }
         ];
 
-        const grid = document.getElementById('skinGrid');
+        const grid = document.getElementById('mainGrid');
 
-        // Kartları Oluşturma
-        function loadSkins() {
-            grid.innerHTML = skins.map(skin => `
-                <div class="skin-card">
-                    <span class="badge ${skin.type === 'FREE' ? 'free' : 'premium'}">${skin.type}</span>
-                    <img src="${skin.img}" class="skin-img">
-                    <div class="info">
-                        <h3>${skin.name}</h3>
-                        <a href="${skin.link}" class="btn ${skin.type === 'PREMIUM' ? 'disabled' : ''}" target="_blank">
-                            ${skin.type === 'FREE' ? 'Kütüphaneye Ekle' : 'Çok Yakında'}
-                        </a>
-                    </div>
+        function loadItems() {
+            grid.innerHTML = items.map(item => `
+                <div class="card">
+                    <span class="item-icon">${item.icon}</span>
+                    <div class="item-name">${item.name}</div>
+                    <button class="get-btn" onclick="showCode('${item.code}')">KODU AL</button>
                 </div>
             `).join('');
         }
 
-        // Arama Fonksiyonu
-        function filterSkins() {
-            const term = document.getElementById('searchBar').value.toLowerCase();
-            const cards = document.querySelectorAll('.skin-card');
-            cards.forEach(card => {
-                const name = card.querySelector('h3').innerText.toLowerCase();
-                card.style.display = name.includes(term) ? 'block' : 'none';
+        function showCode(code) {
+            document.getElementById('targetCode').innerText = code;
+            document.getElementById('codeModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('codeModal').style.display = 'none';
+        }
+
+        function filter() {
+            let val = document.getElementById('search').value.toLowerCase();
+            let cards = document.querySelectorAll('.card');
+            cards.forEach(c => {
+                let name = c.querySelector('.item-name').innerText.toLowerCase();
+                c.style.display = name.includes(val) ? "block" : "none";
             });
         }
 
-        // AdBlock Kontrolü (Basit Mantık)
+        // ADBLOCK KONTROLÜ
         window.onload = function() {
-            loadSkins();
+            loadItems();
             setTimeout(() => {
-                const adZone = document.querySelector('.ad-zone');
-                if (!adZone || adZone.clientHeight === 0) {
-                    document.getElementById('adblock-popup').style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
+                let ads = document.querySelector('.ads');
+                if (!ads || ads.offsetParent === null) {
+                    document.getElementById('blocker').style.display = 'block';
                 }
             }, 500);
-        };
+        }
     </script>
 </body>
 </html>
