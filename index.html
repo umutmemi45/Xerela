@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeynep QR Kod Oluşturucu</title>
+    <title>Zeynep Koç - QR Kod Oluşturucu</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <style>
@@ -152,13 +152,14 @@
         }
 
         #qrCanvas {
-            width: 280px;
-            height: 280px;
+            width: 280px !important;
+            height: 280px !important;
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
             background: #fff;
             padding: 20px;
             margin: 0 auto;
+            display: block;
         }
 
         .actions {
@@ -227,22 +228,22 @@
     <div class="container">
         <div class="header">
             <h1 class="logo">📱 QR</h1>
-            <div class="title">Kişisel QR Kod Oluştur</div>
-            <div class="subtitle">Bilgilerini gir, renkli QR kodunu al ve paylaş!</div>
+            <div class="title">Zeynep Koç</div>
+            <div class="subtitle">QR Kod Oluşturucu - Kişisel Bilgiler</div>
         </div>
 
         <div class="form-grid">
             <div class="form-group">
                 <label>Ad Soyad</label>
-                <input type="text" id="name" placeholder="Zeynep Karakoç" value="Zeynep Karakoç">
+                <input type="text" id="name" placeholder="Zeynep Koç">
             </div>
             <div class="form-group">
                 <label>Telefon</label>
-                <input type="tel" id="phone" placeholder="0555 123 45 67" value="0555 123 45 67">
+                <input type="tel" id="phone" placeholder="0555 123 45 67">
             </div>
             <div class="form-group">
                 <label>E-posta</label>
-                <input type="email" id="email" placeholder="zeynep@example.com" value="zeynep@karakoc.com">
+                <input type="email" id="email" placeholder="zeynep@example.com">
             </div>
         </div>
 
@@ -276,7 +277,7 @@
                 <i class="fas fa-qrcode"></i> QR Oluştur
             </button>
             <button class="btn btn-secondary" onclick="downloadQR()">
-                <i class="fas fa-download"></i> İndir
+                <i class="fas fa-download"></i> PNG İndir
             </button>
         </div>
     </div>
@@ -290,24 +291,28 @@
                 document.querySelectorAll('.qr-style').forEach(s => s.classList.remove('active'));
                 style.classList.add('active');
                 currentStyle = style.dataset.style;
+                generateQR(); // Otomatik yenile
             });
         });
 
-        // QR Oluşturma
+        // QR Oluşturma - KENDİLİĞİNDEN ÇALIŞIR
         function generateQR() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value || 'Zeynep Koç';
+            const phone = document.getElementById('phone').value || '0555 123 45 67';
+            const email = document.getElementById('email').value || 'zeynep@example.com';
 
-            if (!name || !phone || !email) {
-                alert('Lütfen tüm alanları doldurun!');
-                return;
-            }
-
-            const contactData = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nEND:VCARD`;
+            const contactData = `BEGIN:VCARD
+VERSION:3.0
+FN:${name}
+TEL:${phone}
+EMAIL:${email}
+END:VCARD`;
 
             const canvas = document.getElementById('qrCanvas');
+            
+            // Önce temizle
             const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Canvas boyutları
             canvas.width = 400;
@@ -318,23 +323,27 @@
                 width: 360,
                 margin: 1,
                 color: {
-                    dark: '#333333',
+                    dark: '#1a1a1a',
                     light: '#FFFFFF'
                 },
-                // Farklı desenler
                 ...getQRConfig()
             }, (error) => {
-                if (error) console.error(error);
+                if (error) {
+                    console.error('QR Hatası:', error);
+                    return;
+                }
                 
                 // Renkli çerçeve ekle
                 ctx.strokeStyle = '#667eea';
-                ctx.lineWidth = 15;
-                ctx.strokeRect(10, 10, 380, 380);
+                ctx.lineWidth = 12;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeRect(15, 15, 370, 370);
                 
-                // Gradient efekt
+                // Gradient arka plan
                 const gradient = ctx.createLinearGradient(0, 0, 400, 400);
-                gradient.addColorStop(0, 'rgba(102, 126, 234, 0.3)');
-                gradient.addColorStop(1, 'rgba(118, 75, 162, 0.3)');
+                gradient.addColorStop(0, 'rgba(102, 126, 234, 0.15)');
+                gradient.addColorStop(1, 'rgba(118, 75, 162, 0.15)');
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, 400, 400);
             });
@@ -346,17 +355,20 @@
                 normal: {},
                 dots: {
                     dotsOptions: {
-                        type: "dots"
+                        type: "dots",
+                        color: "#1a1a1a"
                     }
                 },
                 rounded: {
                     dotsOptions: {
-                        type: "rounded"
+                        type: "rounded",
+                        color: "#1a1a1a"
                     }
                 },
                 'extra-rounded': {
                     dotsOptions: {
-                        type: "extra-rounded"
+                        type: "extra-rounded",
+                        color: "#1a1a1a"
                     }
                 }
             };
@@ -367,13 +379,20 @@
         function downloadQR() {
             const canvas = document.getElementById('qrCanvas');
             const link = document.createElement('a');
-            link.download = 'zeynep-qr-kod.png';
-            link.href = canvas.toDataURL();
+            link.download = 'Zeynep-Koç-QR.png';
+            link.href = canvas.toDataURL('image/png');
             link.click();
         }
 
-        // Sayfa yüklendiğinde örnek QR
-        window.onload = () => generateQR();
+        // SAYFA AÇILDIĞINDA OTOMATİK QR OLUŞTUR
+        window.addEventListener('load', () => {
+            generateQR();
+        });
+
+        // Input değiştiğinde otomatik güncelle
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', generateQR);
+        });
     </script>
 </body>
-        </html>
+</html>
