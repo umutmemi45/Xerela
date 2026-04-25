@@ -1,173 +1,401 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Free Catalog</title>
+    <title>FreeFlix - Ücretsiz Film İzle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* SIFIR KASMA & HIZLI YÜKLEME */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #1a1a1a; color: #fff; font-family: 'Segoe UI', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        header {
-            background: #222;
-            padding: 15px;
-            border-bottom: 2px solid #39ff14;
-            position: sticky;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #141414;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
             top: 0;
-            z-index: 1000;
-            text-align: center;
+            width: 100%;
+            padding: 15px 30px;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid #333;
         }
 
-        .search-box {
-            width: 90%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-            border: none;
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e50914, #f40612);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
             background: #333;
-            color: white;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
 
-        /* YAN YANA 2'Lİ DİZİLİM */
-        .catalog-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 12px;
+        .search-input:focus {
+            outline: none;
+            border-color: #e50914;
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+            background: #444;
         }
 
-        .item-card {
-            background: #262626;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #333;
+        .search-input::placeholder {
+            color: #aaa;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 18px;
+        }
+
+        /* Hero */
+        .hero {
+            height: 70vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23141414" width="1200" height="600"/><path fill="%23e50914" d="M0 200 Q300 100 600 200 T1200 200 V600 H0 Z"/><circle fill="%23fff" cx="600" cy="180" r="8"/><circle fill="%23fff" cx="400" cy="220" r="6"/><circle fill="%23fff" cx="800" cy="190" r="7"/></svg>');
             display: flex;
             flex-direction: column;
-            transition: 0.2s;
-        }
-
-        .item-card:active { transform: scale(0.95); }
-
-        /* GÖRSEL ALANI (ROBLOX'TAN DİREKT ÇEKER) */
-        .thumb {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: #333;
-            object-fit: cover;
-        }
-
-        .info { padding: 10px; text-align: center; flex-grow: 1; }
-        
-        .name { 
-            font-size: 0.85rem; 
-            font-weight: bold; 
-            height: 34px; 
-            overflow: hidden; 
-            margin-bottom: 8px;
-            color: #ccc;
-        }
-
-        .get-btn {
-            background: #39ff14;
-            color: #000;
-            text-decoration: none;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        /* ADBLOCK ENGELLEYİCİ (PARA KAZANMA KILIDI) */
-        #lock-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             text-align: center;
+            margin-top: 70px;
         }
 
-        .lock-box {
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: #ccc;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .play-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
+        }
+
+        .play-btn:hover {
+            background: #f40612;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.6);
+        }
+
+        /* Movies Grid */
+        .movies-section {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 30px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .movie-card {
             background: #222;
-            padding: 30px;
-            border: 2px solid #ff4d4d;
-            border-radius: 15px;
-            width: 85%;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
-        .lock-box h2 { color: #ff4d4d; margin-bottom: 10px; }
-        .lock-box p { font-size: 0.9rem; color: #aaa; }
+        .movie-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(229, 9, 20, 0.3);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .movie-poster::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+
+        .movie-info {
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .movie-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .movie-year {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #e50914;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .movie-card:hover .play-overlay {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .play-overlay i {
+            font-size: 24px;
+            margin-left: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <div id="lock-screen">
-        <div class="lock-box">
-            <h2>DİKKAT!</h2>
-            <p>Ücretsiz içeriği görebilmek için reklam engelleyiciyi (AdBlock) kapatmalısın.</p>
-            <p style="margin-top:15px; font-size: 0.7rem;">Kapatınca sayfayı yenile.</p>
-        </div>
-    </div>
-
-    <header>
-        <div style="font-weight: 900; color: #39ff14;">SKIN FINDER PRO</div>
-        <input type="text" class="search-box" placeholder="Skin veya eşya ara..." onkeyup="filterItems()">
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-play-circle" style="color: #e50914; margin-right: 10px;"></i>
+                FreeFlix
+            </div>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Film ara... (Dune, Inception, vs.)">
+            </div>
+        </nav>
     </header>
 
-    <div class="catalog-grid" id="grid">
-        </div>
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Ücretsiz Film Keyfi</h1>
+        <p>Tüm zamanların en iyi filmleri ve dizileri tek tıkla izleyin. Reklamsız, kesintisiz, yüksek kalite!</p>
+        <button class="play-btn">
+            <i class="fas fa-play"></i> Hemen İzle
+        </button>
+    </section>
 
-    <div class="ad-check" style="position:absolute; left:-999px;">&nbsp;</div>
+    <!-- Movies -->
+    <section class="movies-section">
+        <h2 class="section-title">Popüler Filmler</h2>
+        <div class="movies-grid">
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #ff6b6b, #4ecdc4);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">Dune</div>
+                    <div class="movie-year">2021 • Bilim Kurgu</div>
+                </div>
+            </div>
+
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #667eea, #764ba2);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">Inception</div>
+                    <div class="movie-year">2010 • Aksiyon</div>
+                </div>
+            </div>
+
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #f093fb, #f5576c);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">The Matrix</div>
+                    <div class="movie-year">1999 • Bilim Kurgu</div>
+                </div>
+            </div>
+
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #4facfe, #00f2fe);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">Interstellar</div>
+                    <div class="movie-year">2014 • Drama</div>
+                </div>
+            </div>
+
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #43e97b, #38f9d7);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">John Wick</div>
+                    <div class="movie-year">2014 • Aksiyon</div>
+                </div>
+            </div>
+
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #fa709a, #fee140);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">Avengers</div>
+                    <div class="movie-year">2012 • Macera</div>
+                </div>
+            </div>
+
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #a8edea, #fed6e3);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">The Godfather</div>
+                    <div class="movie-year">1972 • Dram</div>
+                </div>
+            </div>
+
+            <div class="movie-card" style="background-image: linear-gradient(135deg, #ff9a9e, #fecfef);">
+                <div class="movie-poster"></div>
+                <div class="play-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">Fight Club</div>
+                    <div class="movie-year">1999 • Dram</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
-        // GERÇEK ROBLOX LİNKLERİ VE GÖRSELLERİ
-        const items = [
-            { n: "Mavi Kristal Kask", l: "https://www.roblox.com/catalog/1234567", img: "https://tr.rbxcdn.com/38c6ed7c8a3c61507563b74d4176c12d/420/420/Hat/Png" },
-            { n: "Neon Kulaklık", l: "https://www.roblox.com/catalog/2345678", img: "https://tr.rbxcdn.com/71239c09a89643d930f36f3630f9a2e6/420/420/Hat/Png" },
-            { n: "Minecraft Steve Skin", l: "https://www.minecraft.net/en-us/msaprofile/my-games/editskin", img: "https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/Minecraft-Standard-Edition_Key-Art_960x540.jpg" },
-            { n: "Siyah Havalı Gözlük", l: "https://www.roblox.com/catalog/376527350/Orange-Shades", img: "https://tr.rbxcdn.com/0014a60b9432607831d451240c5f212f/420/420/Accessory/Png" },
-            { n: "Gülümseyen Yüz", l: "https://www.roblox.com/catalog/7074786/Smile", img: "https://tr.rbxcdn.com/7d42531e0750e3347076239121c60b2d/420/420/Face/Png" },
-            { n: "Kırmızı Ejderha Kanadı", l: "https://www.roblox.com/catalog/4567890", img: "https://tr.rbxcdn.com/9783f9821a7a016f6b579758784d5f9d/420/420/Accessory/Png" }
-        ];
+        // Arama fonksiyonu
+        const searchInput = document.querySelector('.search-input');
+        const movieCards = document.querySelectorAll('.movie-card');
+        const titles = Array.from(movieCards).map(card => card.querySelector('.movie-title').textContent.toLowerCase());
 
-        const grid = document.getElementById('grid');
-
-        function draw() {
-            grid.innerHTML = items.map(i => `
-                <div class="item-card">
-                    <img src="${i.img}" class="thumb" alt="${i.n}">
-                    <div class="info">
-                        <div class="name">${i.n}</div>
-                        <a href="${i.l}" class="get-btn" target="_blank">HEMEN AL</a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterItems() {
-            let s = document.querySelector('.search-box').value.toLowerCase();
-            let cards = document.querySelectorAll('.item-card');
-            cards.forEach(c => {
-                let name = c.querySelector('.name').innerText.toLowerCase();
-                c.style.display = name.includes(s) ? "flex" : "none";
-            });
-        }
-
-        // ADBLOCK VE BAŞLANGIÇ
-        window.onload = function() {
-            draw();
-            setTimeout(() => {
-                let ad = document.querySelector('.ad-check');
-                if(!ad || ad.offsetParent === null) {
-                    document.getElementById('lock-screen').style.display = 'flex';
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            movieCards.forEach((card, index) => {
+                if (titles[index].includes(query) || query === '') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
                 }
-            }, 600);
-        }
+            });
+        });
+
+        // Play button efektleri
+        document.querySelectorAll('.movie-card').forEach(card => {
+            card.addEventListener('click', () => {
+                alert('🎬 Film oynatılıyor...\n\nGerçek projede buraya video player gelecek!');
+            });
+        });
+
+        document.querySelector('.play-btn').addEventListener('click', () => {
+            window.scrollTo({ top: document.querySelector('.movies-section').offsetTop - 100, behavior: 'smooth' });
+        });
     </script>
 </body>
-</html>
+    </html>
