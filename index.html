@@ -1,631 +1,163 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Volvo Araba Tamiri Öğrenme</title>
-<style>
-  :root {
-    --volvo-blue: #003066;
-    --volvo-blue-dark: #001f44;
-    --volvo-blue-light: #1a4a8a;
-    --bg: #f5f7fa;
-    --card-bg: #ffffff;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --border: #e5e7eb;
-    --shadow: 0 4px 14px rgba(0, 48, 102, 0.08);
-    --shadow-hover: 0 10px 28px rgba(0, 48, 102, 0.18);
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BOTANIST PRO - V8.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --ana: #0a3d1d; --vurgu: #2e7d32; --arka: #f4f7f4; --beyaz: #ffffff; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; 
+            outline: none !important;
+            border: none;
+        }
 
-  html, body {
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.55;
-    min-height: 100vh;
-  }
+        body { margin: 0; padding: 0; background: var(--arka); font-family: 'Montserrat', sans-serif; }
 
-  button { font-family: inherit; cursor: pointer; }
-  input, button { font-size: 15px; }
+        /* ÜST PANEL */
+        .ust-panel {
+            background: var(--beyaz); padding: 15px 20px;
+            display: flex; align-items: center;
+            border-bottom: 5px solid var(--ana);
+            position: sticky; top: 0; z-index: 1000;
+        }
 
-  /* ========== LOGIN SCREEN ========== */
-  #loginScreen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(0,48,102,0.12), transparent 60%),
-      radial-gradient(circle at 80% 80%, rgba(26,74,138,0.10), transparent 60%),
-      linear-gradient(135deg, #eef2f7 0%, #f7f9fc 100%);
-  }
+        .geri-ok {
+            font-size: 35px; cursor: pointer; color: var(--ana);
+            margin-right: 15px; display: none; line-height: 1;
+        }
 
-  .login-card {
-    width: 100%;
-    max-width: 460px;
-    background: var(--card-bg);
-    border-radius: 18px;
-    padding: 40px 36px;
-    box-shadow: 0 20px 60px rgba(0, 48, 102, 0.18);
-    border: 1px solid rgba(0,48,102,0.08);
-  }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--ana); }
 
-  .brand-bar {
-    width: 56px;
-    height: 6px;
-    background: var(--volvo-blue);
-    border-radius: 3px;
-    margin: 0 auto 18px;
-  }
+        /* KARTLAR */
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto;
+        }
 
-  .login-card h1 {
-    color: var(--volvo-blue);
-    text-align: center;
-    font-size: 26px;
-    letter-spacing: 1.5px;
-    font-weight: 800;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-  }
+        .kart {
+            background: white; border-radius: 20px; overflow: hidden;
+            cursor: pointer; border: 1px solid #eee;
+        }
 
-  .login-card .subtitle {
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 26px;
-  }
+        .kart img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+        .kart h3 { padding: 15px; text-align: center; color: var(--ana); margin: 0; }
 
-  .google-btn {
-    width: 100%;
-    background: #fff;
-    border: 1.5px solid #dadce0;
-    color: #3c4043;
-    padding: 12px 16px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    font-weight: 600;
-    transition: box-shadow .2s, transform .15s;
-    margin-bottom: 22px;
-  }
-  .google-btn:hover {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.10);
-    transform: translateY(-1px);
-  }
-  .google-btn svg { width: 20px; height: 20px; }
+        /* DETAY */
+        #detay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 2000; overflow-y: auto;
+        }
 
-  .divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-    margin: 18px 0;
-    letter-spacing: 1px;
-  }
-  .divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid var(--border);
-  }
-  .divider span { padding: 0 12px; }
+        .banner { width: 100%; height: 300px; object-fit: cover; }
+        .icerik { max-width: 700px; margin: 0 auto; padding: 25px 20px 150px 20px; }
+        .kutu { background: #f9fbf9; border-left: 6px solid var(--vurgu); padding: 20px; margin-bottom: 15px; border-radius: 10px; }
 
-  .form-group { margin-bottom: 14px; }
-  .form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--volvo-blue);
-    margin-bottom: 6px;
-  }
-  .form-group input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    background: #fafbfc;
-    transition: border-color .2s, background .2s;
-  }
-  .form-group input:focus {
-    outline: none;
-    border-color: var(--volvo-blue);
-    background: #fff;
-  }
+        /* SES BUTONU - EN ALTA ÇİVİLİ */
+        .ses-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; padding: 20px; text-align: center;
+            border-top: 1px solid #eee; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
 
-  .login-btn {
-    width: 100%;
-    background: var(--volvo-blue);
-    color: #fff;
-    border: none;
-    padding: 13px;
-    border-radius: 10px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-top: 8px;
-    transition: background .2s, transform .15s;
-  }
-  .login-btn:hover { background: var(--volvo-blue-dark); transform: translateY(-1px); }
-
-  .signup-btn {
-    width: 100%;
-    background: transparent;
-    color: var(--volvo-blue);
-    border: 2px solid var(--volvo-blue);
-    padding: 11px;
-    border-radius: 10px;
-    font-weight: 700;
-    margin-top: 12px;
-    transition: background .2s, color .2s;
-  }
-  .signup-btn:hover { background: var(--volvo-blue); color: #fff; }
-
-  /* ========== APP HEADER ========== */
-  #appScreen { display: none; }
-
-  .app-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--volvo-blue);
-    color: #fff;
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  }
-
-  .back-btn {
-    background: rgba(255,255,255,0.12);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.25);
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background .2s;
-  }
-  .back-btn:hover { background: rgba(255,255,255,0.22); }
-  .back-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-k
-  .app-logo {
-    font-weight: 800;
-    letter-spacing: 1.2px;
-    font-size: 16px;
-    white-space: nowrap;
-  }
-  .app-logo span { color: #ffd24a; }
-
-  .search-wrap {
-    flex: 1;
-    position: relative;
-    max-width: 600px;
-  }
-  .search-wrap input {
-    width: 100%;
-    padding: 11px 16px 11px 42px;
-    border: none;
-    border-radius: 10px;
-    background: #fff;
-    color: var(--text);
-    font-size: 14px;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
-  }
-  .search-wrap input:focus { outline: 2px solid #ffd24a; }
-  .search-icon {
-    position: absolute;
-    top: 50%;
-    left: 14px;
-    transform: translateY(-50%);
-    color: var(--volvo-blue);
-    pointer-events: none;
-  }
-
-  .user-pill {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  /* ========== MAIN CONTENT ========== */
-  .container { max-width: 1280px; margin: 0 auto; padding: 28px 24px 60px; }
-
-  .page-title {
-    color: var(--volvo-blue);
-    font-size: 26px;
-    font-weight: 800;
-    margin-bottom: 6px;
-  }
-  .page-subtitle {
-    color: var(--muted);
-    margin-bottom: 24px;
-    font-size: 14px;
-  }
-
-  /* Model grid */
-  .model-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 22px;
-  }
-  .model-card {
-    background: var(--card-bg);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    transition: transform .25s, box-shadow .25s;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-  }
-  .model-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--volvo-blue-light);
-  }
-  .model-card .img-wrap {
-    aspect-ratio: 16/10;
-    background: linear-gradient(135deg, #e9eef5, #cfd8e3);
-    overflow: hidden;
-    position: relative;
-  }
-  .model-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform .4s;
-  }
-  .model-card:hover img { transform: scale(1.06); }
-  .model-card .badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: var(--volvo-blue);
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-  .model-card .info { padding: 16px 18px 20px; }
-  .model-card h3 {
-    color: var(--volvo-blue);
-    font-size: 19px;
-    margin-bottom: 6px;
-  }
-  .model-card p { color: var(--muted); font-size: 13px; line-height: 1.5; }
-  .model-card .meta {
-    margin-top: 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .model-card .meta strong { color: var(--volvo-blue); }
-
-  /* Parts list */
-  .parts-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-  .parts-count {
-    background: var(--volvo-blue);
-    color: #fff;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .part-item {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 18px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 22px;
-    transition: box-shadow .2s, border-color .2s;
-  }
-  .part-item:hover {
-    box-shadow: var(--shadow-hover);
-    border-color: var(--volvo-blue-light);
-  }
-  .part-img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    border-radius: 10px;
-    background: #eef2f7;
-  }
-  .part-info h4 {
-    color: var(--volvo-blue);
-    font-size: 18px;
-    margin-bottom: 4px;
-  }
-  .part-category {
-    display: inline-block;
-    background: #eef3fb;
-    color: var(--volvo-blue);
-    padding: 3px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-  }
-  .part-desc {
-    color: #374151;
-    font-size: 14px;
-    margin-bottom: 14px;
-    line-height: 1.65;
-  }
-  .repair-title {
-    color: var(--volvo-blue);
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .repair-title::before {
-    content: '';
-    width: 4px;
-    height: 16px;
-    background: var(--volvo-blue);
-    border-radius: 2px;
-  }
-  .repair-steps {
-    list-style: none;
-    counter-reset: step;
-  }
-  .repair-steps li {
-    counter-increment: step;
-    padding: 8px 0 8px 38px;
-    position: relative;
-    color: #374151;
-    font-size: 13.5px;
-    line-height: 1.6;
-    border-bottom: 1px dashed var(--border);
-  }
-  .repair-steps li:last-child { border-bottom: none; }
-  .repair-steps li::before {
-    content: counter(step);
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 26px;
-    height: 26px;
-    background: var(--volvo-blue);
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .scroll-loader {
-    text-align: center;
-    padding: 26px;
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .spinner {
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    border: 3px solid #d6dde6;
-    border-top-color: var(--volvo-blue);
-    border-radius: 50%;
-    animation: spin 0.9s linear infinite;
-    vertical-align: middle;
-    margin-right: 8px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
-  }
-
-  /* Responsive */
-  @media (max-width: 720px) {
-    .app-header { flex-wrap: wrap; padding: 12px; gap: 10px; }
-    .search-wrap { order: 3; flex-basis: 100%; max-width: none; }
-    .app-logo { font-size: 14px; }
-    .part-item { grid-template-columns: 1fr; }
-    .part-img { max-width: 220px; margin: 0 auto; }
-    .login-card { padding: 30px 22px; }
-    .login-card h1 { font-size: 21px; }
-  }
-</style>
+        .oku-btn {
+            background: var(--ana); color: white; 
+            padding: 18px 45px; border-radius: 50px; 
+            font-size: 18px; font-weight: bold; cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============== LOGIN SCREEN ============== -->
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="brand-bar"></div>
-    <h1>Volvo Araba Tamiri Öğrenme</h1>
-    <p class="subtitle">Profesyonel ağır vasıta tamir akademisi — giriş yapın</p>
-
-    <button class="google-btn" onclick="enterApp()">
-      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35.5 24 35.5c-6.4 0-11.5-5.1-11.5-11.5S17.6 12.5 24 12.5c2.9 0 5.6 1.1 7.6 2.9l5.7-5.7C33.6 6.5 29 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5c10.7 0 19.5-8.7 19.5-19.5 0-1.2-.1-2.3-.4-3.5z"/>
-        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12.5 24 12.5c2.9 0 5.6 1.1 7.6 2.9l5.7-5.7C33.6 6.5 29 4.5 24 4.5 16.3 4.5 9.7 8.6 6.3 14.7z"/>
-        <path fill="#4CAF50" d="M24 43.5c5 0 9.5-1.9 12.9-5l-6-5.1c-2 1.4-4.4 2.2-6.9 2.2-5.3 0-9.7-3.4-11.3-8.1l-6.6 5.1C9.6 39.4 16.2 43.5 24 43.5z"/>
-        <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4 5.5l6 5.1c-.4.4 6.7-4.9 6.7-14.6 0-1.2-.1-2.3-.4-3.5z"/>
-      </svg>
-      Google ile Giriş Yap
-    </button>
-
-    <div class="divider"><span>VEYA</span></div>
-
-    <form onsubmit="event.preventDefault(); enterApp();">
-      <div class="form-group">
-        <label for="email">E-posta</label>
-        <input type="email" id="email" placeholder="ornek@volvo-akademi.com" />
-      </div>
-      <div class="form-group">
-        <label for="password">Şifre</label>
-        <input type="password" id="password" placeholder="••••••••" />
-      </div>
-      <div class="form-group">
-        <label for="phone">Telefon Numarası</label>
-        <input type="tel" id="phone" placeholder="+90 555 000 00 00" />
-      </div>
-
-      <button type="submit" class="login-btn">Giriş Yap</button>
-      <button type="button" class="signup-btn" onclick="enterApp()">Üye Ol</button>
-    </form>
-  </div>
-</div>
-
-<!-- ============== APP SCREEN ============== -->
-<div id="appScreen">
-  <header class="app-header">
-    <button class="back-btn" id="backBtn" onclick="goBack()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      Geri
-    </button>
-    <div class="app-logo">VOLVO <span>TAMİR</span> AKADEMİSİ</div>
-    <div class="search-wrap">
-      <span class="search-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </span>
-      <input type="text" id="searchInput" placeholder="Parça, sistem veya tamir adımı ara..." oninput="onSearch()" />
+    <div class="ust-panel">
+        <div class="geri-ok" id="geri" onclick="kapat()">⬅</div>
+        <div class="logo">BOTANIST PRO</div>
     </div>
-    <div class="user-pill">Teknisyen</div>
-  </header>
 
-  <main class="container" id="mainContainer">
-    <!-- dynamic content here -->
-  </main>
-</div>
+    <div id="ana">
+        <div style="padding:20px; text-align:center;">
+            <input type="text" id="arama" placeholder="Ara..." style="width:90%; padding:15px; border-radius:30px; border:1px solid #ddd;">
+        </div>
+        <div class="grid" id="grid"></div>
+    </div>
+
+    <div id="detay">
+        <img id="dImg" class="banner">
+        <div class="icerik">
+            <h1 id="dBas" style="color:var(--ana); font-family:'Playfair Display';"></h1>
+            <div id="dYaz"></div>
+        </div>
+        <div class="ses-bar">
+            <button class="oku-btn" id="okuBtn">🔊 REHBERİ DİNLE</button>
+        </div>
+    </div>
 
 <script>
-/* ============================================================
-   DATA: Volvo Truck Models
-   ============================================================ */
-const MODELS = [
-  {
-    id: 'f88',
-    name: 'Volvo F88',
-    years: '1965 — 1977',
-    desc: 'Volvo\'nun efsanevi ağır vasıta klasiği. Uzun yol taşımacılığında çığır açan F88, 9.6 litrelik TD100 motoru ve 8 vitesli SR62 şanzımanı ile dönemin en güvenilir tırlarından biridir.',
-    badge: 'KLASİK',
-    img: 'https://images.unsplash.com/photo-1592805144716-feeccccef5ac?w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'f12',
-    name: 'Volvo F12',
-    years: '1977 — 1993',
-    desc: 'F88\'in halefi olan F12, modern ağır vasıta tasarımının temellerini atan bir modeldir. TD120 motoru, R1700 şanzımanı ve gelişmiş hava süspansiyonu ile yıllarca standart belirledi.',
-    badge: 'EFSANE',
-    img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'fh12',
-    name: 'Volvo FH12',
-    years: '1993 — 2001',
-    desc: '12 litrelik D12 motoru, I-Shift\'in atası olan SR1900 şanzımanı ve revolüsyoner Globetrotter kabini ile FH ailesinin başlangıcı. Avrupa\'da "Yılın Kamyonu" seçildi.',
-    badge: 'FH SERİSİ',
-    img: 'https://images.unsplash.com/photo-1586191582151-f73872dfd183?w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'fh16-660',
-    name: 'Volvo FH16 660',
-    years: '2009 — 2014',
-    desc: '660 beygir gücü ile dönemin en güçlü seri üretim kamyonu. 16 litrelik D16G motoru, ağır yük çekişi ve dağ geçitleri için tasarlanmış güç canavarı.',
-    badge: '660 HP',
-    img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'fh16-750',
-    name: 'Volvo FH16 750',
-    years: '2011 — günümüz',
-    desc: 'Dünyanın en güçlü seri üretim kamyonu. 750 hp ve 3550 Nm tork ile özel taşımacılık (heavy haulage) için optimize edilmiş, I-Shift Dual Clutch ile donatılı.',
-    badge: '750 HP',
-    img: 'https://images.unsplash.com/photo-1592805144716-feeccccef5ac?w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'fh-2022',
-    name: 'Volvo FH 2022',
-    years: '2021 — 2023',
-    desc: 'Yeni nesil dijital pano, Volvo Dynamic Steering, I-Save sistemi ve aerodinamik kabin güncellemesi ile yakıt ekonomisinde %10\'a kadar tasarruf sağlayan modern FH.',
-    badge: 'YENİ NESİL',
-    img: 'https://images.unsplash.com/photo-1586191582151-f73872dfd183?w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'fh-2024',
-    name: 'Volvo FH 2024',
-    years: '2024',
-    desc: 'En son teknoloji: Aerodinamik kabin revizyonu, geliştirilmiş I-Shift, Adaptive Cruise + Pilot Assist ve gelişmiş ADAS güvenlik paketleri ile donatılı.',
-    badge: '2024 MODEL',
-    img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'electric',
-    name: 'Volvo FH Electric',
-    years: '2022 — günümüz',
-    desc: '540 kW elektrikli güç aktarımı, 300 km menzil ve 6×2 / 6×4 konfigürasyonları ile sıfır emisyonlu ağır taşımacılık. Tamamen elektrikli ağır vasıta serisinin amiral gemisi.',
-    badge: 'ELEKTRİKLİ',
-    img: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&auto=format&fit=crop'
-  },
-];
+    const meyveler = ["Elma", "Armut", "Ayva", "Muz", "Çilek", "Kiraz", "Vişne", "Erik", "Kayısı", "Şeftali", "Nektarin", "Üzüm", "İncir", "Nar", "Karpuz", "Kavun", "Portakal", "Mandalina", "Limon", "Greyfurt", "Turunç", "Lime", "Ananas", "Avokado", "Mango", "Papaya", "Hindistan Cevizi", "Ejder Meyvesi", "Kivi", "Yaban Mersini", "Ahududu", "Böğürtlen", "Frenk Üzümü", "Bektaşi Üzümü", "Kızılcık", "Hünnap", "Muşmula", "Yenidünya", "Trabzon Hurması", "İğde", "Dut", "Karadut", "Goji Berry", "Çarkıfelek", "Guava", "Litchi", "Rambutan", "Mangosten", "Durian", "Yıldız Meyvesi", "Jackfruit", "Ekmek Ağacı", "Tamarillo", "Feijoa", "Nashi", "Physalis", "Pepino", "Kudret Narı", "Demirhindi", "Pomelo", "Kumkuat", "Bergamot", "Salak", "Açai", "Acerola", "Cherimoya", "Soursop", "Longan", "Noni", "Calamansi", "Santol", "Marula", "Baobab", "Cempedak", "Mucize Meyve", "Jujube", "Medlar", "Quince", "Bilberry", "Elderberry", "Cloudberry", "Boysenberry", "Loganberry", "Mulberry", "Star Apple", "Sapodilla", "Mamey Sapote", "Cupuaçu", "Jabuticaba", "Surinam Kirazı", "Kaju Elması", "Ackee", "Sloe", "Damson", "Rose Apple", "Jambolan", "Bael", "Wood Apple", "Custard Apple", "Sugar Apple", "Persimmon", "Pomegranate", "Hurma", "Frenk İnciri", "Tuna", "Boynuzlu Kavun", "Ugli Fruit", "Tangelo", "Satsuma", "Budha Eli", "Finger Lime", "Yuzu", "Sudachi", "Clementine", "Sweetie", "Jostaberry", "Marionberry", "Dewberry", "Salmonberry", "Thimbleberry", "Wineberry", "Hackberry", "Çırçan", "Rowanberry", "Serviceberry", "Huckleberry", "Buffalo Berry", "Chokeberry", "Aronya"];
 
-/* ============================================================
-   DATA: Parts Library (binlerce parça simülasyonu için baz veri)
-   Her model için 28+ detaylı parça
-   ============================================================ */
-const PART_BASE = [
-  {
-    name: 'D13K Motor Bloğu',
-    category: 'Motor',
-    img: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&auto=format&fit=crop',
-    desc: 'D13K, Volvo\'nun 12.8 litrelik 6 silindirli sıralı dizel motorudur. Common-rail enjeksiyon sistemi, VGT turbo ve EGR + SCR kombinasyonu ile Euro 6 standartlarına uygun çalışır. Motor bloğu tek parça dökme demirden imal edilmiş olup üst silindir kapağı ile entegre eksantrik mili (OHC) sistemi içerir. Servis ömrü 1.6 milyon km olarak hedeflenmiştir.',
-    steps: [
-      'Aracı düz zemine çekin, akü kutup başlarını sökün ve yakıt hatlarındaki basıncı tahliye edin (servis menüsünden depressurization moduna alın).',
-      'Soğutma sıvısını alttan tahliye vidasından boşaltın (en az 45 litre kapasiteli kap kullanın). Hava giriş borusu, intercooler hortumları ve egzoz manifold flanşı civatalarını gevşetin.',
-      'Kabin tilt mekanizmasını kullanarak şoför kabinini 60° kaldırın ve emniyet kilidini takın. Üstten enjektör konektörlerini, AdBlue dozaj ünitesini ve EGR valfini sökün.',
-      'Hidrolik motor kaldırma sehpasıyla bloğu destekleyin, motor takozlarındaki M20 civataları söküp bloğu şanzımandan ayırın (T100 torx anahtar gerekir).',
-      'Bloğu çıkardıktan sonra silindir gömleklerini, krank yataklarını ve piston segmanlarını kontrol edin. Gerekirse tornadan geçirip yeni standart ölçü segman takın.',
-      'Montajda yeni conta kiti, krank arka keçesi ve özel Volvo motor yağı (VDS-4.5 spesifikasyonunda) kullanın. Tüm civataları torque tablosuna göre sıkın (ana yatak: 240 Nm + 90°).',
-    ],
-  },
-  {
-    name: 'I-Shift AT2412F Şanzıman',
-    category: 'Şanzıman',
-    img: 'https://images.unsplash.com/photo-1632823471565-1ecdf5c6da77?w=400&auto=format&fit=crop',
-    desc: 'I-Shift AT2412F, 12 vitesli otomatikleştirilmiş manuel şanzımandır. Çift kademeli planet dişli sistemi ve elektronik kontrol ünitesi (TECU) ile sürücüye tam otomatik vites geçişi sunar. Crawler ve Off-Road yazılım paketleriyle 325 ton GCW kapasitesine kadar dayanım sağlar.',
-    steps: [
-      'Aracı çukura alın, vites kolunu N konumuna alıp el frenini çekin. Şanzıman yağ sıcaklığının 40°C\'nin altına inmesini bekleyin.',
-      'TECU\'ya VOCOM II diagnostik aletini bağlayın, hata kodlarını okuyup kalibrasyon değerlerini kaydedin (geri yüklemek için kritik).',
-      'Şanzıman alttan yağ tahliye tıpasını sökün, yaklaşık 13 litre Volvo 97307 sentetik yağı boşaltın. Manyetik tıpadaki metal partikül miktarını inceleyin.',
-      'Kardan milini, debriyaj aktüatörünü ve hava hattı bağlantılarını sökün. Şanzıman kaldırma jackini takın ve 18 adet M14 bağlantı civatasını çıkarın.',
-      'Şanzımanı motordan ayırırken giriş mil
+    const grid = document.getElementById('grid');
+    let metin = "";
+
+    // SES MOTORUNU GÜVENLİ BAŞLATMA
+    function getSynth() {
+        return window.speechSynthesis || null;
+    }
+
+    function listele(f = "") {
+        grid.innerHTML = "";
+        meyveler.filter(m => m.toLowerCase().includes(f.toLowerCase())).forEach(m => {
+            const k = document.createElement('div');
+            k.className = 'kart';
+            const yol = `img/${m.toLowerCase()}.jpg`;
+            k.innerHTML = `<img src="${yol}" onerror="this.src='https://source.unsplash.com/400x300/?${m},fruit'"><h3>${m}</h3>`;
+            k.onclick = () => ac(m, yol);
+            grid.appendChild(k);
+        });
+    }
+
+    function ac(n, i) {
+        document.getElementById('dImg').src = i;
+        document.getElementById('dBas').innerText = n;
+        const h = `<div class="kutu"><b>🌿 BOTANİK:</b><p>${n} hakkında uzman yetiştirme bilgileri burada yer alır.</p></div>
+                   <div class="kutu"><b>📅 HASAT:</b><p>En uygun meyve kalitesi için mevsiminde toplanmalıdır.</p></div>`;
+        document.getElementById('dYaz').innerHTML = h;
+        metin = h.replace(/<[^>]*>/g, '');
+        
+        document.getElementById('detay').style.display = "block";
+        document.getElementById('geri').style.display = "block";
+        window.scrollTo(0,0);
+        
+        // KRİTİK: İlk tıklamada ses motorunu sessizce uyandırıyoruz (Kilit Kırıcı)
+        let s = getSynth();
+        if(s) s.cancel();
+    }
+
+    function kapat() {
+        document.getElementById('detay').style.display = "none";
+        document.getElementById('geri').style.display = "none";
+        let s = getSynth();
+        if(s) s.cancel();
+    }
+
+    document.getElementById('okuBtn').onclick = () => {
+        let s = getSynth();
+        if (!s) return;
+        
+        s.cancel(); // Önce temizle
+        
+        const u = new SpeechSynthesisUtterance(metin);
+        u.lang = 'tr-TR';
+        u.rate = 1.0;
+        
+        // Bazı tarayıcılarda sesin yüklenmesi için 100ms bekletiyoruz
+        setTimeout(() => { s.speak(u); }, 100);
+    };
+
+    document.getElementById('arama').oninput = (e) => listele(e.target.value);
+    listele();
+</script>
+</body>
+</html>
